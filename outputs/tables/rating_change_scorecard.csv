@@ -1,0 +1,2 @@
+n_obs,accuracy,rw_baseline_accuracy,macro_f1,auc_moves
+413,0.7966101694915254,0.7966101694915254,0.29559748427672955,0.5

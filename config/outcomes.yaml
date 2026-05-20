@@ -1,0 +1,49 @@
+# Headline macroeconomic outcomes against which sectoral KPI shocks are
+# evaluated in the Jordà local-projection regressions and against which the
+# composite ranking is benchmarked.
+
+outcomes:
+  - code: NY.GDP.MKTP.CD
+    source: worldbank
+    label: "GDP (current USD)"
+    units: "USD"
+  - code: NY.GDP.PCAP.CD
+    source: worldbank
+    label: "GDP per capita (current USD)"
+    units: "USD"
+  - code: NY.GDP.PCAP.PP.KD
+    source: worldbank
+    label: "GDP per capita (PPP, 2017 USD)"
+    units: "USD"
+  - code: NY.GDP.MKTP.KD.ZG
+    source: worldbank
+    label: "GDP growth"
+    units: "% annual"
+  - code: NY.GDP.PCAP.KD.ZG
+    source: worldbank
+    label: "GDP per capita growth"
+    units: "% annual"
+  - code: SI.POV.GINI
+    source: worldbank
+    label: "Gini coefficient"
+    units: "0–100"
+  - code: SI.POV.DDAY
+    source: worldbank
+    label: "Poverty headcount, $2.15/day"
+    units: "% pop."
+  - code: SI.POV.UMIC
+    source: worldbank
+    label: "Poverty headcount, $6.85/day"
+    units: "% pop."
+  - code: FP.CPI.TOTL.ZG
+    source: worldbank
+    label: "CPI inflation"
+    units: "% annual"
+  - code: SL.UEM.TOTL.ZS
+    source: worldbank
+    label: "Unemployment (modelled ILO)"
+    units: "%"
+  - code: SP.POP.TOTL
+    source: worldbank
+    label: "Total population"
+    units: "persons"

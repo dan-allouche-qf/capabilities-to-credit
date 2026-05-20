@@ -1,0 +1,210 @@
+# Country universe. 13 focal emerging economies (BRICS, AES Sahel,
+# Singapore, three Emerging-Africa middle-income cases, Pakistan) plus
+# 10 extension EMs needed to obtain a credible cross-section in Part III
+# (quintile sorts on 13 countries are uninformative).
+#
+# Fields
+#   iso3        : ISO 3166 alpha-3 country code
+#   name        : English short name
+#   groups      : list of group tags (BRICS, AES, HighPerformers, EmergingAfrica,
+#                 SouthAsia, Extension)
+#   region      : World Bank region key (AFR, EAP, ECA, LAC, MENA, SAS, NAM)
+#   tradable    : whether a liquid USD-denominated equity instrument exists
+#   etf_ticker  : primary single-country ETF used in Part III backtest. Null
+#                 when no liquid instrument exists (these countries are
+#                 reported in the KPI / credit parts and excluded from the
+#                 tradable universe).
+#   etf_inception : first month the ETF is reasonably liquid (used to gate
+#                   inclusion in the backtest universe).
+#   note        : free-form provenance / caveat
+
+focal:
+  - iso3: BRA
+    name: Brazil
+    groups: [BRICS]
+    region: LAC
+    tradable: true
+    etf_ticker: EWZ
+    etf_inception: "2000-07"
+
+  - iso3: RUS
+    name: Russia
+    groups: [BRICS]
+    region: ECA
+    tradable: true
+    etf_ticker: RSX
+    etf_inception: "2007-05"
+    note: "ETF closed for redemptions February 2022; treat as -100% at delisting and remove from universe thereafter."
+
+  - iso3: IND
+    name: India
+    groups: [BRICS]
+    region: SAS
+    tradable: true
+    etf_ticker: INDA
+    etf_inception: "2012-02"
+
+  - iso3: CHN
+    name: China
+    groups: [BRICS, HighPerformers]
+    region: EAP
+    tradable: true
+    etf_ticker: MCHI
+    etf_inception: "2011-04"
+    note: "China is included in both BRICS and High Performers groups."
+
+  - iso3: ZAF
+    name: South Africa
+    groups: [BRICS]
+    region: AFR
+    tradable: true
+    etf_ticker: EZA
+    etf_inception: "2003-02"
+
+  - iso3: BFA
+    name: Burkina Faso
+    groups: [AES]
+    region: AFR
+    tradable: false
+    etf_ticker: null
+    etf_inception: null
+
+  - iso3: MLI
+    name: Mali
+    groups: [AES]
+    region: AFR
+    tradable: false
+    etf_ticker: null
+    etf_inception: null
+
+  - iso3: NER
+    name: Niger
+    groups: [AES]
+    region: AFR
+    tradable: false
+    etf_ticker: null
+    etf_inception: null
+
+  - iso3: SGP
+    name: Singapore
+    groups: [HighPerformers]
+    region: EAP
+    tradable: true
+    etf_ticker: EWS
+    etf_inception: "1996-04"
+
+  - iso3: RWA
+    name: Rwanda
+    groups: [EmergingAfrica]
+    region: AFR
+    tradable: false
+    etf_ticker: null
+    etf_inception: null
+
+  - iso3: KEN
+    name: Kenya
+    groups: [EmergingAfrica]
+    region: AFR
+    tradable: false
+    etf_ticker: null
+    etf_inception: null
+    note: "EM equity exposure available only via thinly-traded GAF; excluded from tradable universe."
+
+  - iso3: MAR
+    name: Morocco
+    groups: [EmergingAfrica]
+    region: MENA
+    tradable: false
+    etf_ticker: null
+    etf_inception: null
+    note: "No liquid US-listed single-country ETF; iShares MSCI Morocco closed in 2013."
+
+  - iso3: PAK
+    name: Pakistan
+    groups: [SouthAsia]
+    region: SAS
+    tradable: true
+    etf_ticker: PAK
+    etf_inception: "2015-04"
+    note: "Global X MSCI Pakistan ETF; thin liquidity post-2017."
+
+extensions:
+  - iso3: IDN
+    name: Indonesia
+    groups: [Extension]
+    region: EAP
+    tradable: true
+    etf_ticker: EIDO
+    etf_inception: "2010-05"
+
+  - iso3: MEX
+    name: Mexico
+    groups: [Extension]
+    region: LAC
+    tradable: true
+    etf_ticker: EWW
+    etf_inception: "1996-04"
+
+  - iso3: TUR
+    name: Türkiye
+    groups: [Extension]
+    region: ECA
+    tradable: true
+    etf_ticker: TUR
+    etf_inception: "2008-03"
+
+  - iso3: THA
+    name: Thailand
+    groups: [Extension]
+    region: EAP
+    tradable: true
+    etf_ticker: THD
+    etf_inception: "2008-03"
+
+  - iso3: PHL
+    name: Philippines
+    groups: [Extension]
+    region: EAP
+    tradable: true
+    etf_ticker: EPHE
+    etf_inception: "2010-09"
+
+  - iso3: MYS
+    name: Malaysia
+    groups: [Extension]
+    region: EAP
+    tradable: true
+    etf_ticker: EWM
+    etf_inception: "1996-04"
+
+  - iso3: POL
+    name: Poland
+    groups: [Extension]
+    region: ECA
+    tradable: true
+    etf_ticker: EPOL
+    etf_inception: "2010-05"
+
+  - iso3: CHL
+    name: Chile
+    groups: [Extension]
+    region: LAC
+    tradable: true
+    etf_ticker: ECH
+    etf_inception: "2007-11"
+
+  - iso3: COL
+    name: Colombia
+    groups: [Extension]
+    region: LAC
+    tradable: true
+    etf_ticker: GXG
+    etf_inception: "2009-02"
+
+  - iso3: PER
+    name: Peru
+    groups: [Extension]
+    region: LAC
+    tradable: true
+    etf_ticker: EPU
+    etf_inception: "2009-06"

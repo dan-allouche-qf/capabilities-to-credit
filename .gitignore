@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+.hypothesis/
+build/
+dist/
+.venv/
+venv/
+.env
+.env.local
+
+# macOS
+.DS_Store
+._*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# LaTeX source (kept local, not published)
+*.tex
+paper/bib/
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+
+# Data caches and heavy result artefacts
+data/raw/
+data/interim/
+data/processed/
+outputs/results/*.joblib
+outputs/results/*.nc
+outputs/figures/*.html
+
+# Streamlit secrets
+dashboard/.streamlit/secrets.toml
+
+# Backups and editor leftovers
+*.bak
+*~
+*.orig

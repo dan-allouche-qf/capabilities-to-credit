@@ -1,0 +1,2 @@
+strategy,ann_return,ann_vol,sharpe,max_dd,n_months
+credit_overlay_top3_minus_bottom3,-0.09280170592983905,0.28448587960055094,-0.3262084784669901,-0.941323250210795,204

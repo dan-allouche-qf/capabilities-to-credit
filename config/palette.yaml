@@ -1,0 +1,56 @@
+# Visual identity.
+#
+# Eight named slots with one extension series (cycle_n) covering the per-country
+# rotations. Hex values follow the Okabe–Ito accessibility family adapted to a
+# deep-teal + ember accent. Used by both matplotlib (theme.py) and plotly.
+
+primary:    "#0F4C5C"
+accent_1:   "#E36414"
+accent_2:   "#FB8B24"
+accent_3:   "#5F0F40"
+neutral:    "#8D99AE"
+dark:       "#2B2D42"
+positive:   "#2A9D8F"
+negative:   "#E63946"
+
+# Background tints used by figures (very light)
+background: "#FFFFFF"
+panel:      "#F8FAFC"
+gridline:   "#E5E7EB"
+
+# Categorical cycle used when more than one country/series shares the same
+# panel. Twenty colours allow the full Part-III universe to share an axis
+# without repetition. Order is hand-tuned for distinguishability with the
+# Okabe–Ito core.
+cycle:
+  - "#0F4C5C"   # primary teal
+  - "#E36414"   # ember
+  - "#5F0F40"   # plum
+  - "#2A9D8F"   # positive teal
+  - "#FB8B24"   # mustard
+  - "#1D3557"   # navy
+  - "#9D0208"   # crimson
+  - "#6A4C93"   # purple
+  - "#386641"   # forest
+  - "#B07D62"   # bronze
+  - "#5B7553"   # olive
+  - "#52796F"   # sage
+  - "#5F4842"   # cocoa
+  - "#9B5DE5"   # violet
+  - "#F15BB5"   # rose
+  - "#3D5A80"   # steel
+  - "#797D62"   # mocha
+  - "#8AA29E"   # mist
+  - "#403D58"   # eggplant
+  - "#A4243B"   # carmine
+
+# Diverging colormap anchors for heatmaps (centred on 0)
+diverging:
+  negative: "#5F0F40"
+  midpoint: "#FFFFFF"
+  positive: "#0F4C5C"
+
+# Sequential colormap anchors (e.g. coverage, density heatmaps)
+sequential:
+  low:  "#F8FAFC"
+  high: "#0F4C5C"

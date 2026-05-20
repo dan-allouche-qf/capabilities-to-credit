@@ -1,0 +1,12 @@
+test,indicator,n_countries,cips_stat,p_005_critical,p_010_critical,p_001_critical,reject_unit_root_at_5pct,transform,y,x,group_t,pvalue_normal,reject_no_cointegration_at_5pct
+CIPS,NY.GDP.PCAP.CD,23,-2.20040832831702,-2.15,-2.07,-2.3,True,log,,,,,
+CIPS,FP.CPI.TOTL.ZG,23,-3.9220679088752823,-2.15,-2.07,-2.3,True,level,,,,,
+CIPS,GC.DOD.TOTL.GD.ZS,15,-1.346378917174603,-2.15,-2.07,-2.3,False,level,,,,,
+CIPS,composite::education,23,-2.24019301529283,-2.15,-2.07,-2.3,True,score,,,,,
+CIPS,composite::energy,23,-2.04209674169435,-2.15,-2.07,-2.3,False,score,,,,,
+CIPS,composite::health,23,-2.1216383629390414,-2.15,-2.07,-2.3,False,score,,,,,
+CIPS,composite::housing_living,22,-1.013103208939927,-2.15,-2.07,-2.3,False,score,,,,,
+CIPS,composite::research_innovation,23,-2.4166417940385756,-2.15,-2.07,-2.3,True,score,,,,,
+CIPS,composite::security_stability,21,-1.995090375225099,-2.15,-2.07,-2.3,False,score,,,,,
+CIPS,composite::composite,23,-2.6468589716274367,-2.15,-2.07,-2.3,True,score,,,,,
+Westerlund_Gt,,23,,,,,,,log_gdppc,composite_score,-2.3673855823571897,0.00895712912168462,True

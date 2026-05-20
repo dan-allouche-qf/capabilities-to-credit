@@ -1,0 +1,282 @@
+# KPI indicators across the six sectors (education, energy, R&I,
+# health, housing & living standards, security & stability).
+#
+# Each indicator carries:
+#   code       : source-specific series identifier
+#   source     : data source key (worldbank, wgi, wipo, who, sipri, eia, oecd_pisa)
+#   label      : short human-readable label used in figures and tables
+#   units      : units of measurement
+#   direction  : "higher_is_better" or "lower_is_better"; used to sign-flip
+#                principal component loadings during composite scoring
+#   role       : "core" or "supplementary"; supplementary indicators are
+#                excluded when computing the headline composite to avoid
+#                penalising countries with sparse coverage (e.g. PISA)
+
+education:
+  - code: SE.ADT.LITR.ZS
+    source: worldbank
+    label: "Adult literacy"
+    units: "% of pop. 15+"
+    direction: higher_is_better
+    role: core
+  - code: SE.PRM.CMPT.ZS
+    source: worldbank
+    label: "Primary completion"
+    units: "% relevant age group"
+    direction: higher_is_better
+    role: core
+  - code: SE.TER.ENRR
+    source: worldbank
+    label: "Tertiary enrolment (gross)"
+    units: "%"
+    direction: higher_is_better
+    role: core
+  - code: SE.XPD.TOTL.GD.ZS
+    source: worldbank
+    label: "Public education spending"
+    units: "% GDP"
+    direction: higher_is_better
+    role: core
+  - code: SE.PRM.ENRL.TC.ZS
+    source: worldbank
+    label: "Pupil–teacher ratio, primary"
+    units: "ratio"
+    direction: lower_is_better
+    role: core
+  - code: PISA_MATH
+    source: oecd_pisa
+    label: "PISA mathematics"
+    units: "score"
+    direction: higher_is_better
+    role: supplementary
+  - code: PISA_READ
+    source: oecd_pisa
+    label: "PISA reading"
+    units: "score"
+    direction: higher_is_better
+    role: supplementary
+  - code: PISA_SCI
+    source: oecd_pisa
+    label: "PISA science"
+    units: "score"
+    direction: higher_is_better
+    role: supplementary
+
+energy:
+  - code: EG.ELC.ACCS.ZS
+    source: worldbank
+    label: "Electricity access"
+    units: "% pop."
+    direction: higher_is_better
+    role: core
+  - code: EG.FEC.RNEW.ZS
+    source: worldbank
+    label: "Renewables in final consumption"
+    units: "%"
+    direction: higher_is_better
+    role: core
+  - code: EG.USE.PCAP.KG.OE
+    source: worldbank
+    label: "Energy use per capita"
+    units: "kg oil equiv."
+    direction: higher_is_better
+    role: core
+    transform: log1p
+  - code: EG.GDP.PUSE.KO.PP.KD
+    source: worldbank
+    label: "Energy productivity"
+    units: "PPP $ per kg OE"
+    direction: higher_is_better
+    role: core
+  - code: EG.USE.ELEC.KH.PC
+    source: worldbank
+    label: "Electric power consumption per capita"
+    units: "kWh"
+    direction: higher_is_better
+    role: core
+    transform: log1p
+
+research_innovation:
+  - code: GB.XPD.RSDV.GD.ZS
+    source: worldbank
+    label: "R&D expenditure"
+    units: "% GDP"
+    direction: higher_is_better
+    role: core
+  - code: SP.POP.SCIE.RD.P6
+    source: worldbank
+    label: "Researchers per million"
+    units: "FTE"
+    direction: higher_is_better
+    role: core
+  - code: IP.JRN.ARTC.SC
+    source: worldbank
+    label: "Scientific articles (log per capita)"
+    units: "log(count / pop.)"
+    direction: higher_is_better
+    role: core
+    transform: log_per_capita
+  - code: TX.VAL.TECH.MF.ZS
+    source: worldbank
+    label: "High-tech exports"
+    units: "% manuf. exports"
+    direction: higher_is_better
+    role: core
+  - code: IP.PAT.RESD
+    source: worldbank
+    label: "Patent applications, residents (log per capita)"
+    units: "log(count / pop.)"
+    direction: higher_is_better
+    role: core
+    transform: log_per_capita
+  - code: IP.PAT.NRES
+    source: worldbank
+    label: "Patent applications, non-residents (log per capita)"
+    units: "log(count / pop.)"
+    direction: higher_is_better
+    role: supplementary
+    transform: log_per_capita
+
+health:
+  - code: SP.DYN.LE00.IN
+    source: worldbank
+    label: "Life expectancy at birth"
+    units: "years"
+    direction: higher_is_better
+    role: core
+  - code: SP.DYN.IMRT.IN
+    source: worldbank
+    label: "Infant mortality"
+    units: "per 1 000 live births"
+    direction: lower_is_better
+    role: core
+  - code: SH.DYN.MORT
+    source: worldbank
+    label: "Under-five mortality"
+    units: "per 1 000 live births"
+    direction: lower_is_better
+    role: core
+  - code: SH.XPD.CHEX.GD.ZS
+    source: worldbank
+    label: "Current health expenditure"
+    units: "% GDP"
+    direction: higher_is_better
+    role: core
+  - code: SH.XPD.GHED.GD.ZS
+    source: worldbank
+    label: "Govt. health expenditure"
+    units: "% GDP"
+    direction: higher_is_better
+    role: core
+  - code: SH.MED.PHYS.ZS
+    source: worldbank
+    label: "Physicians"
+    units: "per 1 000 pop."
+    direction: higher_is_better
+    role: core
+  - code: SH.MED.BEDS.ZS
+    source: worldbank
+    label: "Hospital beds"
+    units: "per 1 000 pop."
+    direction: higher_is_better
+    role: core
+  - code: SH.IMM.MEAS
+    source: worldbank
+    label: "Measles immunisation"
+    units: "% one-year-olds"
+    direction: higher_is_better
+    role: core
+  - code: WHO_UHC_INDEX
+    source: who_gho
+    label: "WHO UHC service-coverage index"
+    units: "index, 0–100"
+    direction: higher_is_better
+    role: core
+  - code: WHO_MAT_MORT
+    source: who_gho
+    label: "Maternal mortality ratio"
+    units: "per 100 000 live births"
+    direction: lower_is_better
+    role: supplementary
+
+housing_living:
+  - code: EN.POP.SLUM.UR.ZS
+    source: worldbank
+    label: "Slum population"
+    units: "% urban pop."
+    direction: lower_is_better
+    role: core
+  - code: SH.H2O.BASW.ZS
+    source: worldbank
+    label: "Basic drinking water"
+    units: "% pop."
+    direction: higher_is_better
+    role: core
+  - code: SH.STA.BASS.ZS
+    source: worldbank
+    label: "Basic sanitation"
+    units: "% pop."
+    direction: higher_is_better
+    role: core
+  - code: SP.URB.TOTL.IN.ZS
+    source: worldbank
+    label: "Urbanisation"
+    units: "% pop."
+    direction: higher_is_better
+    role: supplementary
+  - code: EN.POP.DNST
+    source: worldbank
+    label: "Population density"
+    units: "people per km²"
+    direction: higher_is_better
+    role: supplementary
+
+security_stability:
+  - code: VC.IHR.PSRC.P5
+    source: worldbank
+    label: "Intentional homicides"
+    units: "per 100 000"
+    direction: lower_is_better
+    role: core
+  - code: MS.MIL.XPND.GD.ZS
+    source: worldbank
+    label: "Military expenditure"
+    units: "% GDP"
+    direction: lower_is_better
+    role: supplementary
+  - code: WGI_PV
+    source: wgi
+    label: "Political stability"
+    units: "z-score, ~[-2.5, 2.5]"
+    direction: higher_is_better
+    role: core
+  - code: WGI_RL
+    source: wgi
+    label: "Rule of law"
+    units: "z-score"
+    direction: higher_is_better
+    role: core
+  - code: WGI_CC
+    source: wgi
+    label: "Control of corruption"
+    units: "z-score"
+    direction: higher_is_better
+    role: core
+  - code: WGI_GE
+    source: wgi
+    label: "Government effectiveness"
+    units: "z-score"
+    direction: higher_is_better
+    role: core
+  - code: WGI_VA
+    source: wgi
+    label: "Voice and accountability"
+    units: "z-score"
+    direction: higher_is_better
+    role: core
+  - code: WGI_RQ
+    source: wgi
+    label: "Regulatory quality"
+    units: "z-score"
+    direction: higher_is_better
+    role: core

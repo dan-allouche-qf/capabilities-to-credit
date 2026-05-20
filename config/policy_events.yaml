@@ -1,0 +1,97 @@
+# Country-level policy events drawn on figure timelines. The list is
+# deliberately short and focused on events with sustained, documented
+# macroeconomic impact (regime changes, fiscal frameworks, sanctions,
+# currency reforms). Each entry feeds the policy-timeline figure and serves
+# as a candidate treatment date for synthetic control / event-study designs.
+#
+# Fields
+#   year   : integer year of the event
+#   label  : short caption
+#   category : one of {fiscal, monetary, reform, conflict, sanctions, treaty}
+
+BRA:
+  - {year: 1994, label: "Plano Real (currency stabilisation)", category: monetary}
+  - {year: 1999, label: "Floating exchange rate + inflation targeting", category: monetary}
+  - {year: 2003, label: "Bolsa Família consolidation", category: reform}
+  - {year: 2014, label: "Petrobras / Lava Jato crisis onset", category: reform}
+  - {year: 2016, label: "Constitutional spending cap (EC 95)", category: fiscal}
+  - {year: 2023, label: "New fiscal framework replaces ceiling", category: fiscal}
+
+RUS:
+  - {year: 1998, label: "Sovereign default and devaluation", category: fiscal}
+  - {year: 2004, label: "Stabilisation Fund created", category: fiscal}
+  - {year: 2008, label: "Georgia war, capital outflows", category: conflict}
+  - {year: 2014, label: "Crimea annexation, first sanctions wave", category: sanctions}
+  - {year: 2022, label: "Invasion of Ukraine, freeze of CBR reserves", category: sanctions}
+
+IND:
+  - {year: 1991, label: "Liberalisation reforms (Manmohan Singh)", category: reform}
+  - {year: 2000, label: "FDI cap relaxation in services", category: reform}
+  - {year: 2014, label: "Inflation-targeting framework adopted", category: monetary}
+  - {year: 2016, label: "Demonetisation + GST rollout (2017)", category: fiscal}
+  - {year: 2020, label: "Aatmanirbhar Bharat industrial package", category: reform}
+
+CHN:
+  - {year: 1992, label: "Deng's southern tour, market reforms accelerate", category: reform}
+  - {year: 2001, label: "WTO accession", category: treaty}
+  - {year: 2008, label: "RMB 4-trillion stimulus", category: fiscal}
+  - {year: 2013, label: "Belt and Road launched", category: treaty}
+  - {year: 2015, label: "RMB devaluation episode", category: monetary}
+  - {year: 2020, label: "Three Red Lines policy on developers", category: reform}
+
+ZAF:
+  - {year: 1994, label: "End of apartheid, democratic transition", category: reform}
+  - {year: 2000, label: "Inflation targeting adopted", category: monetary}
+  - {year: 2008, label: "Power crisis (load-shedding)", category: reform}
+  - {year: 2015, label: "Nenegate fiscal credibility shock", category: fiscal}
+  - {year: 2020, label: "Sovereign rating loses investment grade", category: fiscal}
+
+BFA:
+  - {year: 1994, label: "CFA franc devaluation", category: monetary}
+  - {year: 2014, label: "Compaoré ousted, transition government", category: reform}
+  - {year: 2022, label: "Two military coups, AES founding member", category: conflict}
+
+MLI:
+  - {year: 1994, label: "CFA franc devaluation", category: monetary}
+  - {year: 2012, label: "Tuareg rebellion, French intervention", category: conflict}
+  - {year: 2020, label: "Military coup; ECOWAS sanctions (2022)", category: sanctions}
+  - {year: 2023, label: "AES treaty signed", category: treaty}
+
+NER:
+  - {year: 1994, label: "CFA franc devaluation", category: monetary}
+  - {year: 2010, label: "Constitutional referendum, civilian rule restored", category: reform}
+  - {year: 2023, label: "Military coup; ECOWAS sanctions; AES joins", category: sanctions}
+
+SGP:
+  - {year: 1990, label: "Goh Chok Tong era begins; productivity drive", category: reform}
+  - {year: 1997, label: "Asian crisis (mild, MAS pegs SGD)", category: monetary}
+  - {year: 2004, label: "Lee Hsien Loong; biomed and finance push", category: reform}
+  - {year: 2013, label: "Macroprudential housing measures", category: monetary}
+  - {year: 2020, label: "COVID Resilience Budget (S$59bn)", category: fiscal}
+
+RWA:
+  - {year: 1994, label: "Genocide against the Tutsi", category: conflict}
+  - {year: 2000, label: "Vision 2020 launched; Kagame presidency", category: reform}
+  - {year: 2008, label: "Universal primary education target", category: reform}
+  - {year: 2017, label: "Made-in-Rwanda industrial policy", category: reform}
+
+KEN:
+  - {year: 2002, label: "Free primary education", category: reform}
+  - {year: 2010, label: "New constitution and devolution", category: reform}
+  - {year: 2013, label: "Eurobond debut", category: fiscal}
+  - {year: 2018, label: "M-Akiba (mobile bond) and digital tax", category: fiscal}
+  - {year: 2023, label: "IMF EFF/ECF extended arrangement scaled up", category: fiscal}
+
+MAR:
+  - {year: 1999, label: "Mohammed VI accession; reform agenda", category: reform}
+  - {year: 2011, label: "Constitutional reform after protests", category: reform}
+  - {year: 2014, label: "Subsidy reform, fiscal consolidation", category: fiscal}
+  - {year: 2019, label: "Currency band widening", category: monetary}
+
+PAK:
+  - {year: 1998, label: "Nuclear tests, sanctions and IMF", category: sanctions}
+  - {year: 2008, label: "IMF Stand-By Arrangement", category: fiscal}
+  - {year: 2014, label: "CPEC announcement with China", category: treaty}
+  - {year: 2019, label: "Extended Fund Facility, currency adjustment", category: fiscal}
+  - {year: 2022, label: "Floods, IMF talks restart", category: fiscal}
+  - {year: 2023, label: "Default-averting Stand-By Arrangement", category: fiscal}

@@ -1,0 +1,16 @@
+# One-line verdicts for the focal countries, derived from composite_score.csv.
+# Each verdict cites the composite trajectory and rating-cycle reading in a single sentence.
+
+BRA: "Solid middle-of-pack improver (+1.09 sigma since 1990, composite 0.15 -> 1.24); IG attained 2008, lost 2015, partially recovered post-2017."
+CHN: "Largest absolute composite gain in the panel (-0.03 -> +2.33 sigma); rating climbed from BBB- to A+; R&I score is the single most-improved sector at +4.51 sigma."
+IND: "Steady catch-up (+2.15 sigma) lifting India from sub-IG levels to a positive composite of 0.52 sigma by 2024; rating BBB- since 2007."
+RUS: "The panel's only composite decliner over the full window (2.27 -> 1.98 sigma); strong energy and health, but security score never recovers post-2014 sanctions and post-2022 SD."
+ZAF: "Crawl-up composite (+1.17 sigma) but security score the worst in the panel; lost IG 2017, has not returned."
+SGP: "Panel leader throughout (+0.68 sigma improvement from a 1990 base already at 2.25 sigma); R&I dominates with the highest sector score in the panel."
+MAR: "Quietly the second-largest improver in the panel (+2.13 sigma); never tested against an IG line because rating data starts at BB."
+KEN: "Limited composite gain (+0.77 sigma); rating still B+ in 2024; education and security scores hold the country back."
+PAK: "Composite improvement (+1.32 sigma) overwhelmed by recurring fiscal crises; rating cycles in the CCC-B range; never tests IG."
+BFA: "Education and health pull composite up (+1.19 sigma) from very low base; rating coverage thin, no IG bid."
+MLI: "Health-led catch-up (+1.43 sigma); security score absent due to data gaps; political risk dominates the rating reading."
+NER: "Lowest 2024 composite in the panel (-2.58 sigma) despite +1.54 sigma improvement; the climb has not yet translated into a rating event."
+RWA: "Vision-2020 case study (composite -1.95 -> -0.85 sigma); the synthetic-control p-value of 0.96 reflects underpowered placebo, not absence of effect."

@@ -1,0 +1,105 @@
+# Macroeconomic indicators across the four dimensions that frame the
+# development trajectory of a sovereign: national debt, energy production,
+# trade balance, external position.
+#
+# Same schema as kpi_indicators.yaml. Macro indicators feed the control set
+# X_{i,t} in the Jorda local-projection regressions and the macro controls of
+# the credit model in Part II.
+
+national_debt:
+  - code: GC.DOD.TOTL.GD.ZS
+    source: worldbank
+    label: "Central government debt"
+    units: "% GDP"
+    direction: lower_is_better
+  - code: DT.DOD.DECT.CD
+    source: worldbank
+    label: "Total external debt"
+    units: "current USD"
+    direction: lower_is_better
+  - code: DT.DOD.DECT.GN.ZS
+    source: worldbank
+    label: "External debt"
+    units: "% GNI"
+    direction: lower_is_better
+  - code: DT.TDS.DECT.EX.ZS
+    source: worldbank
+    label: "Debt service"
+    units: "% exports of goods & services"
+    direction: lower_is_better
+
+energy_production:
+  - code: EG.ELC.FOSL.ZS
+    source: worldbank
+    label: "Fossil fuel share of electricity"
+    units: "%"
+    direction: lower_is_better
+  - code: EG.ELC.RNWX.ZS
+    source: worldbank
+    label: "Renewables (excl. hydro)"
+    units: "% total"
+    direction: higher_is_better
+  - code: EG.ELC.HYRO.ZS
+    source: worldbank
+    label: "Hydro"
+    units: "% total"
+    direction: higher_is_better
+  - code: EG.ELC.COAL.ZS
+    source: worldbank
+    label: "Coal"
+    units: "% total"
+    direction: lower_is_better
+  - code: EG.ELC.NGAS.ZS
+    source: worldbank
+    label: "Natural gas"
+    units: "% total"
+    direction: lower_is_better
+  - code: EG.ELC.NUCL.ZS
+    source: worldbank
+    label: "Nuclear"
+    units: "% total"
+    direction: higher_is_better
+  - code: EG.ELC.PETR.ZS
+    source: worldbank
+    label: "Petroleum"
+    units: "% total"
+    direction: lower_is_better
+
+trade_balance:
+  - code: NE.EXP.GNFS.CD
+    source: worldbank
+    label: "Exports of goods & services"
+    units: "current USD"
+    direction: higher_is_better
+  - code: NE.IMP.GNFS.CD
+    source: worldbank
+    label: "Imports of goods & services"
+    units: "current USD"
+    direction: higher_is_better
+  - code: NE.RSB.GNFS.ZS
+    source: worldbank
+    label: "External balance on G&S"
+    units: "% GDP"
+    direction: higher_is_better
+  - code: BN.CAB.XOKA.GD.ZS
+    source: worldbank
+    label: "Current account balance"
+    units: "% GDP"
+    direction: higher_is_better
+
+external_position:
+  - code: FI.RES.TOTL.CD
+    source: worldbank
+    label: "Total reserves"
+    units: "current USD"
+    direction: higher_is_better
+  - code: BX.KLT.DINV.WD.GD.ZS
+    source: worldbank
+    label: "FDI net inflows"
+    units: "% GDP"
+    direction: higher_is_better
+  - code: BX.TRF.PWKR.CD.DT
+    source: worldbank
+    label: "Personal remittances received"
+    units: "current USD"
+    direction: higher_is_better
