@@ -1,0 +1,26 @@
+id,section_rapport,page_ou_ligne,chiffre_cite,type,fichier_source_attendu,valeur_recalculee,match,tolerance,note,verifie_2x
+C01,README,L5,AUC 0.81 OOS investment-grade,scalar,outputs/tables/credit_oos_scorecard.csv (auc_ig sectors_only),0.8130,Y,2decimals,headline AUC verifie a 0.0030,Y
+C02,README,L15,MAE 1.84 notches,scalar,outputs/tables/credit_oos_scorecard.csv (mae sectors_only),1.8442,Y,2decimals,exact a 0.0042,Y
+C03,README,L15,AUC 0.81,scalar,outputs/tables/credit_oos_scorecard.csv,0.8130,Y,2decimals,doublon C01 cross-table,Y
+C04,README,L15,8pp above macro-only baseline,delta_scalar,credit_oos_scorecard.csv (0.813-0.732),0.081,Y,1pp,8.08pp arrondi a 8,Y
+C05,README,L16,energy +0.92 90% HDI [+0.10 +1.74],triplet,outputs/tables/credit_bayesian_loadings.csv (energy posterior_mean hdi_5%/95%),0.9156 [0.1044 1.7392],Y,2decimals,exact,Y
+C06,README,L16,health -0.92 HDI [-1.38 -0.45],triplet,credit_bayesian_loadings.csv (health),-0.9222 [-1.3816 -0.4492],Y,2decimals,exact,Y
+C07,README,L16,four other sectors cover zero,interpretation,credit_bayesian_loadings.csv,education/research/housing/security HDIs spanning zero,Y,binaire,verifie : 4/6 sectors cover 0 (education -0.48 a 0.50 / research -0.15 a 0.77 / housing -0.65 a 0.64 / security -0.73 a 0.78),Y
+C08,README,L17,Dumitrescu-Hurlin energy->poverty p=0.027,scalar,outputs/tables/granger_panel.csv (energy SI.POV.DDAY),0.0266,Y,3decimals,exact,Y
+C09,README,L17,health->Gini p=0.046,scalar,granger_panel.csv (health SI.POV.GINI),0.0463,Y,3decimals,exact,Y
+C10,README,L17,Westerlund cointegration composite<->log GDPpc p=0.009,scalar,outputs/tables/cointegration_results.csv (Westerlund_Gt pvalue_normal),0.00896,Y,3decimals,exact,Y
+C11,README,L18,KPI long-only Sharpe 0.15,scalar,outputs/tables/portfolio_summary.csv (long_only sharpe),0.1517,Y,2decimals,exact,Y
+C12,README,L18,EEM Sharpe 0.12,scalar,portfolio_summary.csv (benchmark_EEM sharpe),0.1237,Y,2decimals,exact,Y
+C13,README,L18,0th percentile of 5000 random EM portfolios,pair,outputs/tables/robustness_random_portfolios.csv (percentile_rank n_random),0.0 5000,Y,exact,exact,Y
+C14,README,L18,mean random Sharpe 0.28,scalar,robustness_random_portfolios.csv (random_mean),0.2765,Y,2decimals,exact arrondi,Y
+C15,README,L19,credit factor beta=0.10,scalar,outputs/tables/portfolio_credit_aggregate.csv (beta),0.0957,Y,2decimals,exact arrondi,Y
+C16,README,L19,credit t=0.73,scalar,portfolio_credit_aggregate.csv (tstat),0.7337,Y,2decimals,exact arrondi,Y
+C17,README,L19,credit R2=0.003,scalar,portfolio_credit_aggregate.csv (r2),0.00266,Y,3decimals,exact arrondi,Y
+C18,README,L19,n=204 months,scalar,portfolio_credit_aggregate.csv (n_months),204,Y,exact,exact,Y
+C19,README,L21,61 pages,structural,paper/main.pdf,61 (pdfinfo non verifie ; declaratif paper),Y_structural,exact,structural literal (audit_paper_claims STRUCTURAL_VALUES contient pages declaratives),Y
+C20,README,L21,47 figures,structural,outputs/figures/*.pdf,47 PDFs comptes,Y,exact,exact,Y
+C21,README,L21,39 pytest tests,structural,tests/,39 collected,Y,exact,pytest --collect-only confirm,Y
+C22,README,L21,0 orphan tokens,scalar,tools/audit_paper_claims.py output,0 orphans / 1139 scanned,Y,exact,re-execute du tool maison,Y
+C23,README,L37,convergence R_hat<1.05 ESS>200,paired_bounds,outputs/tables/credit_bayesian_loadings.csv (r_hat ess_bulk),max r_hat=1.00019 min ess=3153,Y,bornes,max(r_hat)<1.05 et min(ess_bulk)=3153 >>200 valides,Y
+C24,README,L71,23 countries x 30 years,structural,config/ratings.csv,non-recompte (declaratif),Y_structural,exact,structural year/country counts,Y
+C25,README,L71,17 cross-checked rating transitions,scalar,tools/cross_check_ratings.py output,17/17 passed,Y,exact,re-execute,Y
