@@ -1,0 +1,156 @@
+\section{Robustness}\label{sec:robustness}
+
+\subsection{Composite rank stability}
+
+The headline rank of \Cref{fig:composite_evolution} survives a battery of sensitivity checks. Dropping any one sector and recomputing the composite for 2024 yields Kendall rank correlations against the full-sample ranking ranging from 0.91 (drop health) to 0.98 (drop housing). \Cref{tab:jackknife} reports the full set.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Kendall $\tau$ between the 2024 composite ranking and the ranking obtained when each sector is dropped in turn.}
+  \label{tab:jackknife}
+  \begin{tabular}{lc}
+    \toprule
+    Sector dropped & Kendall $\tau$ vs full \\
+    \midrule
+    Housing \& Living standards & 0.976 \\
+    Energy & 0.960 \\
+    Education & 0.953 \\
+    Research \& Innovation & 0.937 \\
+    Security \& Stability & 0.937 \\
+    Health & 0.905 \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+Health is the sector whose removal most reshuffles the ranking ($\tau = 0.91$), which is consistent with the negative health loading in the credit model (\Cref{tab:credit_coefs}): the health sector carries a distinctive cross-sectional pattern that does not align with the other sectors.
+
+\subsection{Imputed vs raw panel}
+
+Re-running the composite scoring and the credit OOS exercise on \texttt{panel\_raw} (the master panel before the tiered imputation) yields a 2024 composite Spearman correlation of $0.862$ against the imputed-panel ranking, computed over the 23 countries. The drop from $1.00$ to $0.86$ reflects the AES Sahel and Emerging Africa block whose ranking moves when the within-sector MICE step is removed. The credit out-of-sample AUC for the sectors-only model is $0.813$ on the raw panel against $0.817$ on the imputed panel: imputation buys the headline result less than half a percentage point of AUC. The numbers are in \texttt{outputs/tables/robustness\_imputed\_vs\_raw.csv}.
+
+\subsection{Sub-period splits of the portfolio}\label{sec:subperiod}
+
+\Cref{tab:subperiod} reports the long-only top-quintile portfolio Sharpe (against a 2.5\% annual risk-free rate) computed over four pre-specified sub-periods.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Long-only top-quintile portfolio: realised Sharpe by sub-period. Computed from \texttt{outputs/tables/portfolio\_long\_only\_nav.csv}.}
+  \label{tab:subperiod}
+  \begin{tabular}{lcccc}
+    \toprule
+    Period & Months & Ann.\ return & Ann.\ vol. & Sharpe \\
+    \midrule
+    2007--2010 (incl.\ GFC) & 47 & $+19.5\%$ & $33.4\%$ & $+0.51$ \\
+    2011--2014 & 48 & $-4.4\%$ & $23.4\%$ & $-0.29$ \\
+    2015--2019 & 60 & $+7.2\%$ & $16.2\%$ & $+0.29$ \\
+    2020--2024 & 60 & $+4.0\%$ & $22.0\%$ & $+0.07$ \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+The pattern runs against expectation. The strongest performance window is 2007--2010 ($+0.51$ Sharpe), driven by the GFC and post-GFC rebound: the top KPI quintile in those months was anchored by Singapore, China, Poland and Chile, which collectively outperformed the EM aggregate during the deepest part of the drawdown and the early recovery. The weakest is 2011--2014 ($-0.29$), the period of commodity-cycle disinflation in which low-KPI commodity-exporting EMs out-returned the high-KPI quintile. The latest five years (2020--2024) deliver $+0.07$ Sharpe --- the COVID rebound and the 2022 rates shock leave the long-only KPI portfolio close to the cumulative return of cash.
+
+\subsection{Random-portfolio benchmark}
+
+A non-parametric benchmark replaces the KPI-sorted top quintile by 5\,000 randomly drawn 4-country baskets from the 17-ticker universe, with the same monthly rebalance and 20~bps transaction-cost machinery. The random distribution has a mean Sharpe of $0.28$ and a standard deviation of $0.05$ (90~\% range: $[0.21,\,0.37]$). The KPI strategy's realised Sharpe of $0.15$ sits at the $0^{\text{th}}$ percentile of the random distribution: there is no random basket of four countries from this universe that performed worse than the KPI tilt over 2007--2024.
+
+The reading is sharper than the long-only-vs-EEM comparison of Section~\ref{sec:partIII}. The KPI tilt subtracts about $0.13$ Sharpe units relative to the random benchmark. Two mechanisms can explain this. First, the cap-weighted MSCI EM benchmark itself underperforms random equal-weighted EM portfolios over the same window, so any tilt that is correlated with cap-weight rather than equal-weight inherits part of that handicap. Second, the high-KPI quintile is dominated by Singapore (small cap-weight, low cyclicality) and China (huge cap-weight, idiosyncratic regulatory shocks post-2020), neither of which delivered the "quality minus junk" premium one might have expected.
+
+Together with the OOS credit AUC of 0.81 and a Bayesian posterior that puts non-zero mass on only two sector loadings, the random-portfolio benchmark sharpens the claim that KPIs price into ratings but mis-allocate in equity space at this horizon.
+
+\subsection{Portfolio variants: bucket size, rebalance frequency and transaction-cost sensitivity}
+
+The robustness module also runs the long-only top-bucket portfolio under three variations: bucket count (quintile, tercile, decile), rebalance frequency (monthly, quarterly, annual), and one-way transaction-cost grid (10~bps to 40~bps). \Cref{tab:variants} reports the realised Sharpe for each variant.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Realised Sharpe of the long-only KPI strategy under variant specifications.}
+  \label{tab:variants}
+  \begin{tabular}{lc}
+    \toprule
+    Variant & Sharpe \\
+    \midrule
+    \textit{Transaction costs} & \\
+    \quad 10~bps / side & $0.15$ \\
+    \quad 20~bps / side (baseline) & $0.15$ \\
+    \quad 30~bps / side & $0.15$ \\
+    \quad 40~bps / side & $0.15$ \\
+    \textit{Bucket size (top 1/N)} & \\
+    \quad Tercile (top 1/3 $\approx 5$--6 names) & $0.25$ \\
+    \quad Quintile (top 1/5 $\approx 3$--4 names, baseline) & $0.15$ \\
+    \quad Decile (top 1/10 $\approx 1$--2 names) & $0.35$ \\
+    \textit{Rebalance frequency} & \\
+    \quad Monthly (baseline) & $0.15$ \\
+    \quad Quarterly & $0.12$ \\
+    \quad Annual & $0.11$ \\
+    \textit{Weighting scheme} & \\
+    \quad Equal-weight (baseline) & $0.15$ \\
+    \quad Inverse-vol cap-weight & $0.06$ \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+Transaction-cost sensitivity is negligible at this turnover (the strategy is monthly-rebalanced equal-weight on $\sim$4 names, so per-side costs above 40~bps would be needed to move the Sharpe by even 0.01). Rebalance frequency works mildly in favour of the more granular monthly schedule, with quarterly and annual losing $0.03$--$0.04$ Sharpe. The bucket-size dimension is the variant most sensitive to specification: tercile and decile variants deliver Sharpes of $0.25$ and $0.35$ respectively, against the quintile baseline of $0.15$. The decile version holds 1--2 names at a time --- in practice, almost always Singapore and one other high-KPI country --- and inherits the strong recent performance of Singapore-anchored portfolios. We do not promote this variant to the headline because at $N = 1$--$2$ the strategy is effectively a country pick rather than a factor portfolio, with statistically uninterpretable Sharpe. The weighting-scheme dimension is the most telling: replacing equal weights with an inverse-volatility ``cap-weight'' proxy drops the Sharpe to $0.06$, confirming the claim in Section~\ref{sec:partII} that the cap-weighted MSCI EM benchmark itself underperforms equal-weighted EM baskets in this window. The headline strategy's modest equal-weight Sharpe is therefore not the worst of its variants; cap-weighting it would have been worse.
+
+\subsection{Panel unit-root and cointegration}\label{sec:robust_coint}
+
+The CIPS panel unit-root test of \textcite{pesaran2007} rejects the unit-root null for the composite KPI score ($-2.65$ vs the 5\,\% critical value of $-2.15$) and for log GDP per capita ($-2.20$, just rejecting at 5\,\%). Among the individual sector scores, education ($-2.24$) and research \& innovation ($-2.42$) reject at 5\,\%; the housing-living score is the most non-stationary ($-1.01$, fails to reject), consistent with the slum-population and basic-water-access indicators that compose it being slow-moving and trend-stationary at best.
+
+The Westerlund-style cointegration test between the composite KPI score and log GDP per capita returns a group-mean ADF $t$-statistic of $-2.37$, with an asymptotic-normal one-sided $p$-value of $0.009$ --- rejecting the no-cointegration null at the 1\,\% level. The two series therefore share a long-run equilibrium, consistent with KPI levels and economic output trending together within country across the 35-year window. \Cref{tab:cointegration} summarises the panel.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{CIPS panel unit-root and Westerlund-style group-mean cointegration tests. CIPS critical values from Pesaran (2007) Table II, intercept-only case.}
+  \label{tab:cointegration}
+  \begin{tabular}{lccc}
+    \toprule
+    Series / pair & Statistic & 5\% critical & Reject \\
+    \midrule
+    \textit{CIPS unit-root tests} & & $-2.15$ & H$_0$: unit root \\
+    \quad log GDP per capita & $-2.20$ & & \checkmark \\
+    \quad CPI inflation & $-3.92$ & & \checkmark \\
+    \quad Central government debt (\% GDP) & $-1.35$ & & --- \\
+    \quad Composite KPI score & $-2.65$ & & \checkmark \\
+    \quad Education sector score & $-2.24$ & & \checkmark \\
+    \quad Energy sector score & $-2.04$ & & --- \\
+    \quad R\&I sector score & $-2.42$ & & \checkmark \\
+    \quad Health sector score & $-2.12$ & & --- \\
+    \quad Housing--living sector score & $-1.01$ & & --- \\
+    \quad Security--stability sector score & $-2.00$ & & --- \\
+    \midrule
+    \textit{Westerlund cointegration} & & & H$_0$: no cointegration \\
+    \quad Composite $\leftrightarrow$ log GDPpc, $G_t$ & $-2.37$ & --- & $p = 0.009$ \checkmark \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+\subsection{Composite weighting --- AHP and Lasso alternatives}\label{sec:robust_ahp}
+
+The headline composite is the equal-weighted mean of the six sector scores. Two alternative weighting schemes serve as robustness checks. \textbf{AHP-style weights} drawn from the institutional-quality literature (\textcite{acemoglurobinson2012}, \textcite{kaufmannkraaymastruzzi2010}) place: security-stability $0.25$, R\&I $0.20$, education $0.20$, health $0.15$, energy $0.10$, housing-living $0.10$. The Kendall rank correlation between the equal-weighted and AHP-weighted composite is $\tau = 0.948$ on average over 1990--2024.
+
+\textbf{Lasso-CV weights}, by contrast, let the data choose. A 5-fold cross-validated Lasso of the year-end S\&P rating on the six sector scores selects four sectors at non-zero coefficients: R\&I ($+1.15$), energy ($+0.64$), education ($+0.51$), housing-living ($+0.39$) and security-stability ($+0.27$); health is shrunk to zero at the CV-optimal $\alpha$. The 200-replicate bootstrap, however, picks health $100\,\%$ of the time with mean coefficient $-1.77$, indicating the single-CV shrinkage to zero is an artefact of the specific $\alpha$ chosen rather than a stable selection signal.
+
+The three weighting schemes produce highly consistent rankings on the full 23-country panel at the latest-year cross-section: equal-AHP $\tau = 0.953$ ($p \approx 0$), equal-Lasso $\tau = 0.913$ ($p \approx 0$), AHP-Lasso $\tau = 0.897$ ($p \approx 0$). The headline equal-weight ranking averaged across 1990--2024 sits at $\tau = 0.948$ versus AHP, and the latest-year figure is therefore in line with the cross-year average. The headline composite ranking is not sensitive to the choice of weighting scheme, and the equal-weight specification is corroborated by both the institutional-prior weights and the data-driven Lasso.
+
+\subsection{Hamilton filter sensitivity}\label{sec:robust_hamilton}
+
+Re-running the LP grid on a $\{1, 2, 3\} \times \{3, 4, 5\}$ grid of Hamilton forecast-horizon and AR-lag parameters preserves the sector-shock ranking at LP horizon 1 exactly: the cross-grid Kendall $\tau$ on the rank of the six sector-shock coefficients equals $1.00$ in every cell against the baseline $(2, 4)$. The qualitative IRF pattern is therefore invariant to plausible Hamilton parameter choices.
+
+\subsection{Rolling-Sharpe stability}
+
+\Cref{fig:rolling_sharpe} plots the long-only strategy's 36-month rolling Sharpe, with the random-portfolio mean of 0.28 overlaid. The rolling Sharpe trends from above $1.0$ in early 2010s after the post-GFC bounce to negative territory in 2015--2016, recovers to roughly the random-portfolio mean in 2019, and ends the sample near zero.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f28_rolling_sharpe}
+  \caption{36-month rolling Sharpe of the long-only top-quintile KPI strategy.}
+  \label{fig:rolling_sharpe}
+\end{figure}

@@ -1,0 +1,12 @@
+\section{Country dashboards}\label{app:country_dashboards}
+
+One page per focal country. Each figure shows the composite KPI score, the six sector scores, the four headline macroeconomic indicators (GDP per capita in USD, central-government debt as a share of GDP, the current-account balance, and CPI inflation) and the S\&P rating trajectory --- all over 1990--2024.
+
+\foreach \iso in {BRA,RUS,IND,CHN,ZAF,BFA,MLI,NER,SGP,RWA,KEN,MAR,PAK}{%
+  \begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{f30_dashboard_\iso}
+    \caption*{}
+  \end{figure}
+  \clearpage
+}

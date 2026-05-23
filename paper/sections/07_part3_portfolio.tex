@@ -1,0 +1,120 @@
+\section{Part III --- EM factor portfolio}\label{sec:partIII}
+
+The portfolio block asks whether the KPI signal that is informative about sovereign credit can be turned into a tradable EM equity strategy. The answer, on this universe and at monthly horizons, is no.
+
+\subsection{Headline performance}
+
+\Cref{tab:portfolio_summary} reports the realised performance of the long-only top-quintile portfolio, the long-short top-minus-bottom variant, and the MSCI Emerging Markets benchmark (EEM) over January 2007--December 2024.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Strategy realised performance, monthly returns aggregated to annual statistics. The Sharpe is annualised. The bootstrap CI is the 5\%--95\% range of the stationary-bootstrap distribution (Politis--Romano, mean block 12 months, 5\,000 replications).}
+  \label{tab:portfolio_summary}
+  \begin{tabular}{lccccc}
+    \toprule
+    Strategy & Ann.\ return & Ann.\ vol. & Sharpe & Max DD & Sharpe 90\% CI \\
+    \midrule
+    Long-only top quintile & 3.62\% & 23.8\% & 0.15 & $-56.2\%$ & $[-0.08,\;0.62]$ \\
+    Long-short top$-$bottom & $-11.07\%$ & 27.0\% & $-0.41$ & $-94.5\%$ & $[-0.34,\;0.39]$ \\
+    MSCI EM (EEM) & 2.62\% & 21.2\% & 0.12 & --- & --- \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+The long-only top-quintile portfolio earns 3.62\% per year against the EEM benchmark's 2.62\%. The Sharpe ratios are 0.15 vs 0.12 --- both meagre, with the KPI strategy adding about $0.03$ Sharpe over the cap-weighted benchmark. The 90\% bootstrap CI on the strategy Sharpe is $[-0.08,\,0.62]$, which includes both the benchmark and zero. The strategy does not deliver risk-adjusted outperformance once the cyclical noise of monthly EM returns is accounted for.
+
+The long-short variant is much worse. Annualised return is $-11.1$\% and the maximum drawdown is $94$\%. \Cref{fig:portfolio_nav} shows where the damage comes from: the long-short NAV halves between mid-2014 and end-2015 (a period in which low-KPI Russia, Turkey and Brazil ETFs returned more than high-KPI Singapore and Chile, and so the strategy was short the wrong basket), and then loses most of the residual NAV across 2016--2018 in a slow drift. The forced close of RSX in February 2022 contributes a roughly $-10$\% one-month return to the short book.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f23_portfolio_nav}
+  \caption{Cumulative NAV of the two KPI-sorted strategies, January 2007--December 2024, after 20~bps per-side transaction costs.}
+  \label{fig:portfolio_nav}
+\end{figure}
+
+The long-only drawdown profile (\Cref{fig:portfolio_drawdown}) tracks the well-known emerging-market drawdown chronology: $-50$\% in the 2008--2009 GFC, a $-15$\% drawdown in 2013 around the Taper Tantrum, the 2015--2016 commodity-cycle drawdown, the COVID drawdown of early 2020, and the 2022 rates-shock drawdown. \Cref{fig:dd_overlap} overlays the KPI strategy's drawdown on the MSCI EM benchmark's drawdown with crisis periods shaded; the two trace each other closely through every regime, which visually confirms the high $\beta_{EEM}$ in the risk decomposition. None of the crisis drawdowns is mitigated by the KPI tilt, which holds Singapore, China, Poland and Chile in many of the relevant months.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f24b_drawdown_overlap}
+  \caption{Drawdown of the long-only KPI strategy (filled teal) compared to the MSCI EM benchmark (ember line) with five crisis windows shaded.}
+  \label{fig:dd_overlap}
+\end{figure}
+
+\Cref{fig:quintiles} disaggregates the strategy by quintile. The five quintile portfolios end the 2007--2024 window at NAVs between $1.9\times$ and $3.0\times$, with no monotone pattern in the rank: Q5 (top KPI quintile) does not dominate Q1 (bottom KPI quintile) over the full sample. Q3 --- the median KPI bucket --- is consistently the weakest, ending at $\sim$1.9$\times$. The visual confirms the headline of the random-portfolio benchmark: a KPI sort does not generate a monotone Sharpe pattern across quintiles, in contrast to a textbook factor (where Q5 should dominate Q1 by construction).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f25_quintile_navs}
+  \caption{Five KPI-sorted quintile portfolios, January 2007--December 2024, log-scale NAV.}
+  \label{fig:quintiles}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f24_portfolio_drawdown}
+  \caption{Drawdown of the long-only top-quintile strategy.}
+  \label{fig:portfolio_drawdown}
+\end{figure}
+
+\subsection{Risk-factor decomposition}\label{sec:risk_decomp}
+
+\Cref{tab:risk_decomp} reports the OLS decomposition of monthly excess returns onto the five-factor benchmark vector $(EEM, URTH, UUP, USO)$ described in Section~\ref{sec:portfolio_method}.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Risk-factor decomposition of the strategy returns. Coefficients on monthly returns; $\alpha$ is the monthly intercept.}
+  \label{tab:risk_decomp}
+  \begin{tabular}{lcccccc}
+    \toprule
+    Strategy & $\alpha$ (monthly) & $\beta_{EEM}$ & $\beta_{URTH}$ & $\beta_{UUP}$ & $\beta_{USO}$ & $R^2$ \\
+    \midrule
+    Long-only top quintile & $+0.13\%$ & $0.73$ & $0.17$ & $-0.59$ & $0.04$ & $0.84$ \\
+    Long-short top$-$bottom & $-0.68\%$ & $0.38$ & $0.17$ & $+0.30$ & $-0.04$ & $0.05$ \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+Two readings are direct. The long-only top-quintile portfolio is, factor-adjusted, almost indistinguishable from a passive blend of MSCI EM, MSCI World and a short-USD basket: $R^2 = 0.84$, monthly $\alpha$ of $0.13\%$ (annualised: $\sim$1.5\%). What the strategy delivers above the benchmark in Section~\ref{sec:partIII} is a USD-short exposure ($\beta_{UUP} = -0.59$) that happens to correlate with the high-KPI quintile because that quintile is heavy on Asian commodity importers (Singapore, China, Thailand) whose ETF returns benefit when the dollar weakens. The long-short variant has $R^2 = 0.05$ on the same factors and a monthly $\alpha$ of $-0.68\%$ (annualised $-7.9\%$), confirming that its losses are not explained by the standard EM benchmark machinery --- they are an intrinsic feature of selling low-KPI countries at the wrong dates.
+
+\Cref{fig:risk_decomp} visualises the same coefficients as a side-by-side bar chart.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.95\linewidth]{f27_risk_decomposition}
+  \caption{Risk-factor decomposition of the strategy returns. Coefficients on monthly returns.}
+  \label{fig:risk_decomp}
+\end{figure}
+
+\Cref{fig:bootstrap_random} shows the bootstrap Sharpe distribution from the 5 000 random four-country baskets and the KPI strategy's position in it. The KPI strategy sits at the $0^{\text{th}}$ percentile of the random distribution: no random four-country basket from this universe performed worse than the KPI tilt over 2007--2024. The realised KPI Sharpe of $0.15$ sits about $0.13$ units below the random-portfolio mean of $0.28$.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f26_bootstrap_sharpe_vs_random}
+  \caption{Distribution of Sharpe ratios across 5 000 random four-country EM portfolios (long-only, monthly rebalanced, 20~bps tcosts). The realised KPI strategy Sharpe is marked in ember.}
+  \label{fig:bootstrap_random}
+\end{figure}
+
+\subsection{Closing the loop: tradable credit extension}\label{sec:credit_tradable}
+
+The conclusion of the equity section is that the KPI signal mis-allocates in equity space at the monthly horizon. The natural follow-up is to ask whether it works in EM \emph{credit}, which prices slowly and is more receptive to slow-moving fundamentals. We run three tests on free credit instruments.
+
+\emph{Aggregate signal vs EMB returns.} Time-series regression of monthly EMB total returns (iShares JPM USD EM Sovereign Bond) on the year-on-year change in the cross-sectional mean composite, lagged one year. Over the 204 months from 2008--2024, the slope coefficient is $\beta = +0.10$ with $t = 0.73$ and $R^2 = 0.003$. The aggregate KPI improvement does not predict EMB returns.
+
+\emph{Credit-augmented risk decomposition.} Adding EMB as a fifth factor in the OLS decomposition of the long-only KPI portfolio: $\beta_{EMB} = 0.09$ (small, positive), $R^2$ rises from $0.84$ to $0.84$, alpha unchanged. The headline strategy is not heavily exposed to EM credit beta; it remains primarily an EM-equity-and-USD-short bundle.
+
+\emph{Predicted-upgrade / predicted-downgrade overlay.} Taking the country composite as a proxy for credit-quality momentum, we build a long top-3 / short bottom-3 country-ETF portfolio (monthly rebalanced, 20~bps tcosts). The overlay returns $-9.3$\% annualised at Sharpe $-0.33$ with max DD $-94$\%. The credit-flavoured tilt does not rescue the equity story.
+
+The credit extension thus reports an honest negative result. The KPI signal predicts the cross-sectional \emph{level} of the rating (AUC 0.81) but does not translate into monthly returns on the EM sovereign-credit benchmarks accessible here. To test the signal where it should work --- on individual sovereign-CDS spreads or country-level EMBI spreads at the cross-sectional level --- requires proprietary data we do not have.
+
+\subsection{Reading}
+
+The MSCI EM comparison in \Cref{tab:portfolio_summary} understates how poorly the KPI signal works in equity space. The non-parametric benchmark in Section~\ref{sec:robustness} (5\,000 random 4-country baskets) places the KPI strategy at the $0^{\text{th}}$ percentile of the random distribution --- below every one of the 5\,000 simulated random baskets --- with the random mean at Sharpe $0.28$ vs our $0.15$. The KPI tilt is not a neutral noise generator: it under-performs a randomly selected equal-weighted EM basket on this period by roughly $0.13$ Sharpe units.
+
+The reading is consistent with the message of \Cref{sec:partII}. KPIs are slow-moving --- a country does not raise its average education score by half a standard deviation in a single quarter --- so the predictive content of a KPI-based factor is concentrated in instruments that price slowly. Ratings re-price on year-to-year frequencies and respond to fundamentals over decades; sovereign-spread information flows therefore reward the KPI signal. Country-ETF total returns price at the monthly frequency and dominantly reflect cyclical macro shocks (commodity prices, Fed-cycle dollar strength, China growth surprises) that are orthogonal to development fundamentals, and even slightly negatively correlated with them at quarterly horizons (the ``commodity-export tilt'' captured in the 2011--2014 sub-Sharpe of $-0.29$). A natural extension --- left to a follow-up build --- is to deploy the same KPI signal on EMBI total-return indices, where the credit-pricing intuition of \Cref{sec:partII} would translate more directly to tradable performance.
+
+The headline message is therefore not ``KPIs are an equity factor that matches the benchmark'' but ``KPIs are a sovereign-credit factor that actively mis-allocates in equity space at this horizon.'' The distinction matters for an asset-allocation reader: a KPI signal belongs in EM credit overlays and rating-driven mandates, not in equity tilts.

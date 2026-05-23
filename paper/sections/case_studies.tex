@@ -1,0 +1,25 @@
+\section{Case studies: China, Russia, Rwanda}\label{sec:case_studies}
+
+The aggregate findings hide three case studies that illustrate the methodology in different regimes: a textbook rise (China), a rare divergence (Russia), and a catch-up that hasn't fully translated into credit upgrades yet (Rwanda).
+
+\subsection{China --- the rise}
+
+China's composite KPI score moves from $-0.03$ in 1990 to $+2.33$ in 2024, a $+2.36\,\sigma$ swing that is the largest absolute improvement in the 23-country panel. The improvement is broad-based across sectors: research \& innovation $+4.51\,\sigma$, health $+2.73\,\sigma$, education $+2.66\,\sigma$, energy $+2.15\,\sigma$, housing-living $+2.02\,\sigma$. Only security-stability barely moves ($+0.11\,\sigma$), reflecting WGI estimates that compress the political-governance dimension despite the operational improvements.
+
+S\&P's rating trajectory matches: BBB in 1995, A+ in 2008, AA- in 2010, A+ from 2017. The 2017 downgrade after the financial-leverage build-up is the one event that breaks the otherwise monotonic upgrade path. Our pooled ordered probit out-of-sample predicts China's latest rating with no notch error: predicted A+, actual A+. The Bayesian posterior places China firmly in the IG cluster of \Cref{fig:eh_credit_map} ($+2.15$ on energy, $+2.79$ on health). The two-sector posterior view --- which finds only energy and health credibly load on the rating --- is consistent with China's composite-2024 placement and the rating it actually carries.
+
+\subsection{Russia --- the divergence}
+
+Russia is the one country in the panel whose composite \emph{declines} over 1990--2024: $+2.27$ in 1990 to $+1.98$ in 2024, a $-0.29\,\sigma$ move. The sector decomposition is informative. Energy and education are flat ($+0.10$, $+0.16\,\sigma$). Security-stability marginally improves ($+0.52$). The health score collapses by $-2.52\,\sigma$, the largest negative cell in \Cref{fig:sector_change}. The collapse traces back to the demographic crisis of the 1990s, the chronic shortfall in public-health spending relative to OECD peers, and the post-2014 sanctions period.
+
+The S\&P rating arc tracks this divergence with a lag and an amplifier. Russia reaches BBB+ in 2007, holds BBB until 2014, drops to BB+ in 2014 (Crimea sanctions), regains BBB- in February 2018, and finally goes to selective default in March 2022. The 2018 re-upgrade aligns with the energy-score recovery the KPI panel captures; the 2014 and 2022 downgrades are macro/political shocks the composite cannot capture, since the KPI panel updates slowly and at annual frequency. The OOS ordered-probit predicts the 2021 rating (BBB-) exactly, and the model lags the 2022 default by construction.
+
+The Russia case sharpens the paper's framing of the credit signal: KPI scores are the slow-moving floor, and macro/political shocks introduce a credit-spread band around that floor. Section~\ref{sec:partII} measures the floor (KPIs $\to$ rating level). Macroeconomic and geopolitical noise drive the deviations.
+
+\subsection{Rwanda --- the catch-up that has not yet repriced}
+
+Rwanda's composite climbs from $-1.95$ in 1990 to $-0.85$ in 2024 ($+1.10\,\sigma$), one of the larger improvements among low-income countries. The sector decomposition is concentrated in health (the post-genocide rebuild produced a $+3.32\,\sigma$ improvement on a low base), energy ($+1.23\,\sigma$ on electrification), and housing-living ($+0.86\,\sigma$ on basic-water access). Education and R\&I barely move; security-stability is flat.
+
+S\&P first rated Rwanda B in 2009 and has not upgraded it since (B-/B+/B band through 2024). Despite the synthetic-control GDPpc gap of $+\$1\,051$ (Section~\ref{sec:synthrwanda}) and the composite-score gain, the rating has not followed. Two readings reconcile the gap. First, the rating-prediction model's OOS error on Rwanda is concentrated on the upgrade direction --- the sectors-only model over-predicts Rwanda's rating by 2--3 notches in 2018--2024, indicating that the KPI panel \emph{would} support a higher rating but S\&P's macro/fiscal lens does not. Second, the synthetic-control placebo p-value (0.96) reminds us that the GDPpc gap, while economically meaningful, is not statistically extreme.
+
+Rwanda is the cleanest illustration of the paper's slow-moving-fundamental thesis: KPI improvements compound for decades before they fully reprice into credit. The Cox proportional-hazards estimate (Section~\ref{sec:partII}) gives an education-baseline hazard ratio of $1.49$ ($p = 0.16$), consistent with the conjecture that further capability gains would shorten the time-to-IG --- but the small sample and the censoring at 2024 keep the result outside the conventional confidence band.

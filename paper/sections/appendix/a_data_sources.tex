@@ -1,0 +1,21 @@
+\section{Data sources and codes}\label{app:data}
+
+\subsection*{World Bank Open Data}
+
+All KPI and macro indicators with World Bank codes (\texttt{NY.GDP.MKTP.CD}, \texttt{SP.DYN.LE00.IN}, etc.) are pulled via the public REST API at \url{https://api.worldbank.org/v2/}. The full list of indicators and their sectoral mapping is in \texttt{config/kpi\_indicators.yaml} and \texttt{config/macro\_indicators.yaml}.
+
+\subsection*{Worldwide Governance Indicators}
+
+WGI series (\texttt{PV.EST}, \texttt{RL.EST}, \texttt{CC.EST}, \texttt{GE.EST}, \texttt{VA.EST}, \texttt{RQ.EST}) are accessed through the same World Bank channel. The series start in 1996 and are biennial through 2002, annual thereafter; biennial cells are linearly interpolated between observed years.
+
+\subsection*{S\&P sovereign ratings}
+
+Hand-compiled from S\&P's annual \emph{Sovereign Default and Rating Transition Study} and rating-action press releases, stored in \texttt{config/ratings.csv}. The numeric mapping is the 22-notch S\&P main scale (AAA = 22 down to SD/D = 1; NR cells are excluded).
+
+\subsection*{Yahoo Finance country ETFs}
+
+Daily total-return prices for the 17 country ETFs and the four benchmarks (EEM, URTH, UUP, USO) are downloaded via the \texttt{yfinance} Python package and cached at \texttt{data/raw/yfinance.parquet}. Monthly returns are computed as last-of-month closing-price ratios.
+
+\subsection*{FRED}
+
+The U.S.\ 3-month Treasury constant-maturity yield (\texttt{DGS3MO}) is the risk-free rate for the Sharpe computation. Pulled from the FRED public CSV endpoint without an API key.

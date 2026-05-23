@@ -1,0 +1,58 @@
+\section{Part I --- Local-projection evidence}\label{sec:partI}
+
+We estimate the specification in Section~\ref{sec:lp_method} for the six sector shocks and three outcomes: $\log$ GDP per capita (×100), the poverty headcount at \$2.15/day, and the Gini coefficient. \Cref{fig:lp_gdppc} shows the IRFs against $\log$ GDP per capita.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f09_lp_irfs_gdppc}
+  \caption{Local-projection impulse responses of $\log$ GDP per capita (×100) to a one-unit cyclical innovation in each sector score. Country and year fixed effects; Driscoll--Kraay 90~\% bands (Newey-West lag $\ell = 2$ for $T = 35$). Hamilton (2018) cyclical innovations as shocks. $H = 8$.}
+  \label{fig:lp_gdppc}
+\end{figure}
+
+The picture is mostly noisy but contains one statistically significant signal. Within the panel of 23 countries over 35 years (805 country-years before adjustments), the cyclical components of slow-moving indicators (life expectancy, slum population, rule of law, R\&D expenditure) carry very little variance, so most coefficients are imprecisely estimated. The point estimates at $h=1$ range from $-9.6$ (health, $t = -2.70$, $p = 0.007$) to $+6.7$ (security-stability, $t = +1.59$, $p = 0.11$). The health coefficient is therefore credibly negative at the 1\,\% level on the percent-of-GDPpc scale; all five other sector shocks have Driscoll-Kraay 90~\% bands that include zero at horizon $h = 1$.
+
+The negative-and-significant health coefficient at $h=1$ deserves a sentence on its own. Three readings are consistent with it. First, reverse causality: countries entering a slowdown frequently raise public-health expenditure counter-cyclically (the WHO health-spending share, which loads on the health composite, is the clearest example), so a positive cyclical innovation in the health composite at $t$ is followed mechanically by a negative GDP-per-capita movement in the following year. Second, within-country fixed-effect demeaning: after country and year averages are removed, the residual variance available to identify $\beta^h_s$ is small and the few country-years that drive the estimate are precisely those mid-cycle moments where health spending and growth diverge. Third, the cyclical components in our panel are simply small: a one-unit innovation in the health score is by construction an unusually large move, and the linear extrapolation to a one-unit shock magnifies a fragile coefficient. We therefore document the significant negative coefficient honestly but do not interpret it as evidence that health investment hurts growth; the long-run literature is overwhelmingly in the opposite direction.
+
+For the five other sectors, two reads of the noisy-IRFs picture are consistent with the data.
+
+The first is methodological. Local projections deliver clean causal identification when shocks are large and orthogonal to slow-moving fundamentals --- the canonical applications are monetary shocks, oil prices, or fiscal-consolidation events (\cite{jordataylor2016}). Sector-score innovations fail both conditions. They are small (the cyclical residual of a quadratic-trending sector score has a standard deviation an order of magnitude below the trend) and likely correlated with omitted forcings (a positive education shock and a positive R\&D shock both reflect, plausibly, the same underlying institutional improvement).
+
+The second is substantive. KPIs are causal in the sense that the literature treats them --- raising R\&D intensity does raise productivity, raising school enrolment does raise human capital, raising sanitation does raise life expectancy --- but the causal pathway operates over decades, not over the 8-horizon window we estimate here. To pick this up properly we would need either a longer panel (1960--2024, requiring a different scope), or sharper instruments (regression-discontinuity around education reforms, synthetic control around governance shocks).
+
+We therefore report the LP results in full, flag the negative-health finding with its caveat, and lean on three complementary strategies for the causal argument: the synthetic-control case study (\S\ref{sec:synthrwanda}), the panel Granger test (\S\ref{sec:granger}), and the Westerlund cointegration test of \S\ref{sec:robust_coint}, which detects a long-run equilibrium between the composite and log GDP per capita.
+
+The LP IRFs against poverty headcount and Gini (computed in \texttt{outputs/tables/lp\_irf.csv}) follow the same pattern: noisy at this $N \times T$ sample, with most 90~\% bands covering zero. The same outcomes deliver materially sharper evidence under the Dumitrescu-Hurlin panel Granger test (\S\ref{sec:granger}), where the cross-country average $\bar W$ statistic --- which integrates over country heterogeneity rather than imposing a common $\beta_h$ --- picks up the distributional-tail effects of KPI improvements.
+
+\subsection{Synthetic control: Rwanda's Vision 2020}\label{sec:synthrwanda}
+
+A complementary identification strategy follows \textcite{abadiediamondhainmueller2010}: pick a sharp policy episode for a single country and estimate its causal effect against a synthetic counterfactual built from a donor pool. Rwanda's Vision~2020, launched in mid-1999 and operationalised through the 2000s, is a natural treatment. The treated unit is Rwanda; the donor pool is the other 22 panel members with continuous GDP-per-capita PPP coverage from 1990 onwards; the outcome is GDP per capita (PPP, 2017 USD); the treatment year is 2000.
+
+The optimisation solves for non-negative donor weights summing to one that minimise the mean-squared pre-treatment gap between actual and synthetic Rwanda. The optimal weights are 55\% Burkina Faso and 45\% Niger --- two AES members with similar 1990s starting points. The pre-treatment fit RMSE is \$353 (2017 PPP USD), well within the 1990s GDPpc range of \$700--\$1300 for Rwanda. \Cref{fig:synthrwanda} shows the result.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f13_synth_rwanda_2000}
+  \caption{Synthetic-control estimate of Vision 2020. Left: actual Rwanda GDP per capita vs the synthetic counterfactual (BFA-NER weighted). Right: in-space placebo permutation --- each grey line is a placebo gap computed by re-running synthetic control on a different donor as if it were treated.}
+  \label{fig:synthrwanda}
+\end{figure}
+
+Actual Rwandan GDP per capita reaches \$3\,265 in 2024 against a synthetic counterfactual of \$2\,214, a +\$1\,051 PPP USD gap. Pre-2000 the actual and synthetic trajectories track closely; the divergence opens after 2003 and accumulates approximately linearly through to 2024. The placebo permutation, however, fails to reject the no-effect null: ranking Rwanda's post-treatment mean absolute gap against the 22-country placebo distribution returns $p = 0.957$, and the RMSPE-ratio test of \textcite{abadiediamondhainmueller2010} returns $p = 1.000$. Several donor countries (notably the high-growth Asian extensions and post-1990s Russia) have synthetic counterfactuals that miss far more than Rwanda's, which broadens the placebo distribution and erodes the rank-based inference. The reading is therefore weaker than the gap headline alone would suggest: Rwanda's \$1\,051 PPP USD gap is meaningful in absolute terms but not statistically extreme in the placebo sense. We report this honestly rather than over-claim a clean treatment effect, and note that a tighter donor pool restricted to similar baseline-income countries would likely deliver a smaller $p$-value at the cost of donor diversity.
+
+\subsection{Panel Granger causality}\label{sec:granger}
+
+The Dumitrescu-Hurlin (\citeyear{dumitrescuhurlin2012}) panel-Granger test averages country-level Wald statistics for the joint significance of the lagged shock in a country-specific autoregressive regression of the outcome. With $p = 2$ lags and the same six sector shocks, three sets of associations emerge cleanly from the noise (\Cref{fig:granger}):
+
+\begin{itemize}\setlength{\itemsep}{0.1em}
+  \item Energy shocks Granger-cause poverty reduction ($\bar W = 8.60$, $p = 0.027$ on the \$2.15-a-day headcount, $N = 22$ countries).
+  \item Health shocks Granger-cause Gini reduction ($\bar W = 7.09$, $p = 0.046$) and poverty reduction at borderline significance ($\bar W = 6.60$, $p = 0.056$).
+  \item Education, housing-living and research--innovation shocks Granger-cause poverty and Gini at borderline significance ($p \in [0.06, 0.10]$).
+\end{itemize}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\linewidth]{f16_granger_heatmap}
+  \caption{Dumitrescu-Hurlin panel Granger causality $p$-values, sector shock to outcome. Lower is stronger evidence against the no-causality null.}
+  \label{fig:granger}
+\end{figure}
+
+None of the six sector shocks Granger-causes log GDP per capita at conventional levels --- consistent with the LP findings. Where the panel-Granger test materially adds to the picture is on the distribution outcomes (poverty headcount and Gini). The 2024 cross-section of poverty headcount and inequality is more strongly preceded by past sector-score movements than the GDP per capita is. That makes substantive sense: KPI improvements raise the floor (sanitation, electricity access, basic-water access, health system depth, primary completion) and therefore move the lower tail of the income distribution before they move the cross-country mean of log GDP per capita. The signal is in the distributional outcomes, not the aggregate.

@@ -33,11 +33,9 @@ venv/
 .ipynb_checkpoints/
 *.ipynb
 
-# LaTeX source (kept local, not published)
-*.tex
-paper/bib/
-
-# LaTeX build artifacts
+# LaTeX build artifacts only — the .tex source IS published
+# (was previously excluded via *.tex + paper/bib/, restored on audit-2026-05 to
+# enable end-to-end paper reproducibility for fresh clones via `make paper`)
 *.aux
 *.bbl
 *.bcf
