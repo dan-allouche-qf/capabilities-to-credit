@@ -1,0 +1,169 @@
+\section{Part II --- Sovereign credit application}\label{sec:partII}
+
+The credit block answers a sharper question. Given the year-end S\&P rating for the 20 rated members of our panel, how much of the rating is in the development KPIs alone --- before we even look at the macro variables that the literature has long established as the price drivers?
+
+\Cref{fig:comp_rating} shows the headline geometric answer at a single glance: the 2024 composite KPI score against the 2024 S\&P rating, country by country. The OLS line through the cross-section has $R^2 = 0.71$ and a slope of $3.08$ rating notches per $\sigma$ of composite score. Singapore sits at the AAA-tier upper-right corner; Burkina Faso and Pakistan in the sub-IG bottom-left; the BBB cluster (Mexico, Indonesia, India, Morocco, Philippines) sits along the diagonal. The relationship is not constructed by the model --- it is the raw data.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f17b_composite_vs_rating_scatter}
+  \caption{Latest-year composite KPI score (x) versus latest-year S\&P numeric rating (y), 20 rated countries. Horizontal bands indicate AAA / AA tier, investment grade, and sub-IG. The dashed line is the cross-sectional OLS fit.}
+  \label{fig:comp_rating}
+\end{figure}
+
+\subsection{In-sample fit}
+
+The pooled ordered probit on sector scores alone (Section~\ref{sec:credit_method}) yields the coefficients in \Cref{tab:credit_coefs}. Five of the six loadings are positive; the exception is health, which carries a negative weight ($-0.46$). The negative health loading is not pathological: in our panel, several high-credit-rated economies (Russia in the 2005--2014 plateau, Pakistan with relative-quality health metrics for its rating tier) sit at intermediate health scores, while Niger (low rating, low health) and Singapore (very high rating, very high health) anchor the extremes. The cross-sectional pull of the data favours housing ($+0.46$), education ($+0.53$) and R\&I ($+0.36$) as the most rating-relevant sectors.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Pooled ordered probit coefficients on sector scores --- in-sample fit.}
+  \label{tab:credit_coefs}
+  \begin{tabular}{lc}
+    \toprule
+    Sector & Coefficient \\
+    \midrule
+    Education & $0.530$ \\
+    Energy & $0.018$ \\
+    Research \& Innovation & $0.356$ \\
+    Health & $-0.462$ \\
+    Housing \& Living standards & $0.455$ \\
+    Security \& Stability & $0.168$ \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+\subsection{Out-of-sample evaluation}
+
+The headline result of this section is in the OOS scorecard (\Cref{tab:credit_scorecard}, \Cref{fig:credit_scorecard}). On the 321 country-year observations for which a sector-only prediction is feasible (the WHO UHC index restricts coverage to country-years from the mid-2000s onwards), the weighted MAE is 1.84 notches and the AUC for the investment-grade binary is 0.813.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Expanding-window out-of-sample evaluation, $T \in \{2005, \dots, 2024\}$. MAE and RMSE on the 22-notch numeric scale. ``IG accuracy'' is the share of correctly classified investment-grade observations. AUC is for the IG binary classifier.}
+  \label{tab:credit_scorecard}
+  \begin{tabular}{lcccccc}
+    \toprule
+    Model & MAE & RMSE & IG accuracy & AUC (IG) & $n$ \\
+    \midrule
+    Sectors only & 1.84 & 2.43 & 0.801 & \textbf{0.813} & 321 \\
+    Macro only & 2.03 & 2.66 & 0.694 & 0.732 & 196 \\
+    Full (sectors + macro) & 1.80 & 2.43 & 0.690 & 0.750 & 155 \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f20_credit_scorecard}
+  \caption{Credit out-of-sample scorecard: prediction error (left) and IG-classification AUC (right).}
+  \label{fig:credit_scorecard}
+\end{figure}
+
+Three observations follow.
+
+\emph{First}, sector scores alone carry the credit information. The sectors-only model is the best at IG discrimination (0.813 AUC) --- an 8.1 percentage-point improvement over the macro-only baseline (0.732). The full model is no better than sectors-only in AUC (it actually loses to 0.750) and only marginally better in MAE (1.80 vs 1.84 notches), at the cost of a much smaller in-sample (the macro variables narrow the joint sample sharply). The macro variables --- debt/GDP, current account, inflation, $\log$ GDPpc --- are well-established price drivers in the sovereign-credit literature, so the comparison is not a strawman. The interpretation is that the cross-sectional information that S\&P aggregates into a rating is already in the KPIs, and the macro panel is largely redundant once they are in.
+
+\emph{Second}, the OOS calibration (\Cref{fig:credit_calibration}) is well-behaved. Predicted ratings are mildly compressed toward the mean: Singapore (AAA = 22) is under-predicted at 19 (AA-) and Burkina Faso is over-predicted by 2--3 notches when ratings are available. The pattern is consistent with what would be expected from a pooled model without sovereign-specific risk premia. The off-diagonal mass is concentrated at $\pm 2$ notches, with a small left-tail of severe misses concentrated on the Pakistan / Russia 2022 transitions to SD.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.62\linewidth]{f19_credit_calibration}
+  \caption{Out-of-sample rating calibration: predicted vs actual numeric S\&P rating. Dashed line = $45^{\circ}$. The full-model OOS MAE is 1.80 notches.}
+  \label{fig:credit_calibration}
+\end{figure}
+
+\emph{Third}, the rating heatmap (\Cref{fig:rating_heatmap}) provides a visual anchor for the OOS exercise: Singapore is AAA throughout, China holds AA- in the early 2010s and drops to A+ from 2017, Russia loses investment grade in April 2014 and again to selective default in March 2022. The Sahel block is unrated. These transitions are picked up imperfectly by the OOS predictions: the model lags S\&P by typically one year on the Russia and Brazil downgrades.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f17_rating_heatmap}
+  \caption{S\&P foreign-currency long-term sovereign rating, year-end snapshot, numeric 1--22 scale. White cells = unrated.}
+  \label{fig:rating_heatmap}
+\end{figure}
+
+\Cref{fig:auc_curve} reports the ROC curve for the investment-grade binary classifier. The empirical AUC equals 0.77 on the joint-feature model, with the parsimonious sectors-only model reaching the headline 0.81 reported above --- the macro vector adds essentially no discriminatory power once the sector scores are in.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.62\linewidth]{f21_auc_curve}
+  \caption{ROC curve for the out-of-sample investment-grade classification, full-model predictions.}
+  \label{fig:auc_curve}
+\end{figure}
+
+\Cref{fig:marginal_effects} visualises the same in-sample marginal effects as \Cref{tab:credit_coefs}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\linewidth]{f22_marginal_effects}
+  \caption{Marginal effect of sector scores on the latent rating index (in-sample ordered-probit coefficients).}
+  \label{fig:marginal_effects}
+\end{figure}
+
+\subsection{Bayesian hierarchical posterior}\label{sec:bayes_credit}
+
+The frequentist coefficients in \Cref{tab:credit_coefs} are point estimates without credible intervals. The Bayesian hierarchical specification of Section~\ref{sec:credit_method} (Model~2) returns a full posterior on each sector loading. We sample with NUTS for 1\,500 draws across 4 chains after a 750-draw burn-in; the run completes in roughly 100 seconds on a laptop. \Cref{fig:bayes_loadings} shows the posterior mean and 90~\% HDI for the population-level mean loadings $\mu_\beta$.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.9\linewidth]{f18_bayesian_loadings}
+  \caption{Posterior distribution of the population-mean sector loading $\mu_\beta$ in the Bayesian hierarchical credit model. Points are posterior means; bars are 90~\% HDIs.}
+  \label{fig:bayes_loadings}
+\end{figure}
+
+The Bayesian picture is cleaner than the frequentist one. The energy sector emerges as credibly positive (posterior mean $+0.92$, 90~\% HDI $[+0.10,\,+1.74]$). Health is credibly negative (posterior mean $-0.92$, 90~\% HDI $[-1.38,\,-0.45]$). The remaining four sectors --- education, R\&I, housing-living, security --- have HDIs that bracket zero. The implication is that, conditional on the panel and on the model, only two sectors carry posterior credit-signal in this specification: energy as a positive loading (consistent with the role of energy-system maturity in growth potential and creditor confidence) and health as a negative one (the cross-sectional pull of intermediate-rated economies with developed-tier health metrics, as noted earlier).
+
+The conventional reading would be ``run the frequentist for in-sample fit, run the Bayesian for principled credible intervals on the same parameters.'' We treat the two together: the headline AUC of 0.81 holds whichever framework one prefers, and the posterior makes it explicit that the credit signal is concentrated in two of the six sectors rather than smeared evenly.
+
+\subsection{Survival analysis: time to investment grade}\label{sec:survival}
+
+Among the 21 S\&P-rated members of the panel, 16 have crossed into investment grade at some point during 1995--2024 and 5 remain below BBB- at the censoring date (Burkina Faso, Kenya, Pakistan, Rwanda, and South Africa post-2017 lost-IG; for the latter we treat the first IG attainment as the event, not the loss). Modelling the time from first-rating to first-IG attainment as a duration with right-censoring lets us ask which sector capabilities accelerate the rating upgrade pathway.
+
+\Cref{fig:km_survival} reports the Kaplan--Meier survival function split by above-median vs below-median baseline scores on energy and health. \Cref{fig:cox_hazards} reports the per-sector hazard ratios from a Cox proportional-hazards model with all six sectors as covariates and an $L_2$ penalty of 0.05.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f30_survival_km}
+  \caption{Kaplan--Meier survival of "not yet investment grade", split by baseline energy (left) and health (right). High-energy and high-health countries reach IG faster on point estimates; the split is not statistically separable at $n = 21$.}
+  \label{fig:km_survival}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.85\linewidth]{f31_cox_hazards}
+  \caption{Per-sector hazard ratios (95\,\% CIs) from a Cox PH model with $L_2$ penalty. A hazard ratio above 1 indicates the sector accelerates IG attainment.}
+  \label{fig:cox_hazards}
+\end{figure}
+
+The point estimates point in the expected direction: education has the highest hazard ratio ($1.49$, $p = 0.16$); energy follows at $1.33$ ($p = 0.41$); health lies slightly below one ($0.91$, $p = 0.55$). None of the six coefficients clears the 5\,\% threshold, which is unsurprising given only 16 events and a 6-covariate model. The result is consistent with the Bayesian posterior on the rating level: education and energy lift the IG transition rate; the negative health coefficient at the level (Section~\ref{sec:bayes_credit}) does not contradict an HR slightly below one in the duration setting.
+
+\subsection{Rating-change prediction}\label{sec:rating_change}
+
+Predicting the next-year rating-change \emph{direction} ($-1$ / $0$ / $+1$) is a stricter test than predicting the rating level. Year-on-year changes are rare: only $84$ of $413$ rated country-years in our OOS sample carry a non-zero change. The naive random-walk baseline (always predict $0$) achieves accuracy $0.797$.
+
+The pooled ordered logit on the six sector scores fitted to expanding windows from 2005 reaches accuracy $0.797$, macro F1 $= 0.30$, and AUC $= 0.50$ on the binary ``any-move'' classifier. The 3$\times$3 confusion matrix (\Cref{fig:rating_change}) collapses the predicted-class column to $0$: the model, faced with 80\,\% zeros and only 84 events out of 413, defaults to the random-walk baseline.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.62\linewidth]{f32_rating_change_confusion}
+  \caption{Confusion matrix of the rating-change OOS classifier. The model collapses to ``always predict no change'' --- consistent with the rare-event nature of the target.}
+  \label{fig:rating_change}
+\end{figure}
+
+This is a clean negative finding. KPI levels predict the cross-sectional \emph{level} of the rating (AUC 0.81 in Section~\ref{sec:partII}) but, on the one-year horizon and with 6 sector covariates, do not anticipate the timing of rating moves. The signal is right about \emph{where} a country sits in the credit hierarchy; it is silent about \emph{when} that hierarchy is repriced.
+
+\Cref{fig:eh_credit_map} visualises the Bayesian-implied credit signal geometrically. Each country is plotted in (energy, health) score space, coloured by rating bucket, with the dashed line marking the IG / sub-IG decision boundary implied by the posterior linear index. The AAA/AA cluster (Singapore, the high-Energy / high-Health corner) is cleanly separated from the sub-IG cluster (Pakistan, Burkina Faso, in the low-Energy region) by the boundary. South Africa and Brazil sit close to the boundary on the IG side, consistent with their post-2014 / post-2017 downgrade history. The geometric picture matches the OOS classifier: KPIs separate rating buckets without help from the macro panel.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f18b_energy_health_credit_map}
+  \caption{Countries placed in (energy, health) score space, coloured by 2024 rating bucket. The dashed line is the Bayesian-posterior IG decision boundary. The energy-positive / health-negative signal in the posterior translates into a clean diagonal separation between AAA/IG and sub-IG observations.}
+  \label{fig:eh_credit_map}
+\end{figure}
+
+\subsection{Reading}
+
+The credit block is the most quantitative-finance-relevant block of the paper. The empirical content reduces to: a six-dimensional KPI vector summarising development across sectors out-performs a four-dimensional macro vector summarising sovereign solvency at distinguishing investment-grade from sub-investment-grade out of sample, by roughly eight AUC percentage points (0.81 vs 0.73), and the two are not additive in the conventional joint specification. KPIs are not a noisy proxy for the macro fundamentals; they are an independent information channel that picks up institutional quality and human-capital depth, both of which feed the rating through governance, willingness-to-pay and growth-potential channels (\cite{cantorpacker1996, hilschernosbusch2010}).

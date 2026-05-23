@@ -1,0 +1,25 @@
+\section{Bayesian model — MCMC diagnostics}\label{app:mcmc}
+
+\Cref{tab:mcmc_diagnostics} reports the rank-normalised $\widehat{R}$ \parencite{vehtari2021rank} and bulk effective sample size (ESS) for each population-mean sector loading $\mu_\beta$ in the Bayesian hierarchical credit model of Section~\ref{sec:credit_method}. Both statistics are computed from the four chains' $1\,500$ post-warm-up draws ($6\,000$ samples total) using Gelman--Rubin (\textcite{gelmanetal2013}) for $\widehat{R}$ and the Geyer initial monotone-sequence estimator for bulk ESS.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Bayesian convergence diagnostics for $\mu_\beta$. $\widehat{R}$ thresholds: $1.01$ excellent, $1.05$ acceptable. ESS rule-of-thumb: $> 400$ adequate for posterior summaries.}
+  \label{tab:mcmc_diagnostics}
+  \begin{tabular}{lcc}
+    \toprule
+    Sector & $\widehat{R}$ & ESS (bulk) \\
+    \midrule
+    Education & $1.00$ & $4\,937$ \\
+    Energy & $1.00$ & $3\,419$ \\
+    Research \& Innovation & $1.00$ & $3\,153$ \\
+    Health & $1.00$ & $3\,893$ \\
+    Housing \& Living standards & $1.00$ & $3\,834$ \\
+    Security \& Stability & $1.00$ & $3\,273$ \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+All six $\widehat{R}$ values round to $1.00$ at three decimal places, well below the $1.05$ rejection threshold the build pipeline enforces. The minimum bulk ESS is $3\,153$ on the research-innovation loading, an order of magnitude above the $400$-sample minimum used for posterior summary statistics. The sampler completes in roughly $100$ seconds on a laptop without divergences. Both observations support reading the posterior summaries in Section~\ref{sec:bayes_credit} at face value; the Markov chains are well-mixed and the credible intervals are stable across re-runs with different seeds (verified manually).

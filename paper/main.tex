@@ -1,0 +1,91 @@
+\documentclass[11pt,a4paper]{article}
+
+% --- typography ---------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\IfFileExists{sourceserifpro.sty}{\usepackage{sourceserifpro}}{}
+\IfFileExists{sourcesanspro.sty}{\usepackage[default]{sourcesanspro}}{}
+\IfFileExists{sourcecodepro.sty}{\usepackage{sourcecodepro}}{}
+\usepackage{microtype}
+
+% --- layout -------------------------------------------------------------
+\usepackage[margin=1in,headheight=14pt]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{titling}
+\setlength{\droptitle}{-1.5cm}
+
+% --- math / symbols -----------------------------------------------------
+\usepackage{amsmath, amssymb, bm}
+\usepackage{mathtools}
+\usepackage{siunitx}
+\sisetup{detect-all,table-number-alignment=center}
+
+% --- tables / figures ---------------------------------------------------
+\usepackage{booktabs, threeparttable}
+\usepackage{tabularx, multirow, array}
+\usepackage{graphicx, subcaption, caption}
+\usepackage{pgffor}
+\graphicspath{{figures/}}
+\captionsetup{font=small, labelfont=bf, labelsep=period, justification=raggedright,
+              singlelinecheck=false}
+
+% --- references ---------------------------------------------------------
+\usepackage{csquotes}
+\usepackage[backend=biber, style=authoryear-comp, maxcitenames=2, mincitenames=1,
+            uniquelist=false, isbn=false, url=false, doi=false]{biblatex}
+\addbibresource{bib/refs.bib}
+
+\usepackage[colorlinks=true, urlcolor=teal, linkcolor=teal, citecolor=teal]{hyperref}
+\usepackage{cleveref}
+
+% --- colour scheme matching the matplotlib palette ----------------------
+\usepackage{xcolor}
+\definecolor{primary}{HTML}{0F4C5C}
+\definecolor{accent}{HTML}{E36414}
+\definecolor{rule}{HTML}{2B2D42}
+
+% --- title / author -----------------------------------------------------
+\title{\Large\bfseries\color{primary}
+       From Capabilities to Credit:\\
+       \large Development KPIs as Causal Drivers, Priced Risk, and Tradable EM Factors}
+\author{Dan Allouche\thanks{The code, data and figures that generated every number in this paper are available in a companion repository (\texttt{newperformers}).}}
+\date{Version of \today}
+
+% --- section headings ---------------------------------------------------
+\usepackage{titlesec}
+\titleformat*{\section}{\large\bfseries\color{primary}}
+\titleformat*{\subsection}{\normalsize\bfseries\color{rule}}
+
+\begin{document}
+\maketitle
+
+\input{sections/00b_executive_summary}
+
+\input{sections/00_abstract}
+
+\vspace{0.6em}\hrule\vspace{1.0em}
+
+\input{sections/01_introduction}
+\input{sections/02_literature}
+\input{sections/03_data}
+\input{sections/04_methodology}
+\input{sections/05_part1_causal}
+\input{sections/06_part2_credit}
+\input{sections/case_studies}
+\input{sections/07_part3_portfolio}
+\input{sections/08_robustness}
+\input{sections/09_conclusion}
+\input{sections/replication_package}
+
+\printbibliography[heading=bibintoc, title=References]
+
+\appendix
+\input{sections/appendix/a_data_sources}
+\input{sections/appendix/b_imputation}
+\input{sections/appendix/c_coverage}
+\input{sections/appendix/d_country_dashboards}
+\input{sections/appendix/e_mcmc_diagnostics}
+
+\end{document}
