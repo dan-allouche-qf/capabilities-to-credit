@@ -1,0 +1,120 @@
+\section{Methodology}\label{sec:methodology}
+
+\subsection{Sample and external validity}\label{sec:sample_external_validity}
+
+The 23-country panel is purposive, not random: 13 countries are the focal group (chosen to span BRICS, the Sahel-AES low-income contrast, the Singaporean and Chinese high-performer cases, three Emerging-Africa middle-income economies and Pakistan) and 10 are extension EMs added because their country ETF has at least 10 years of liquid trading history. The panel therefore over-represents Asia--Pacific emerging markets (China, India, Indonesia, Malaysia, the Philippines, Singapore, Thailand) and under-represents Sub-Saharan Africa beyond Sahel and East Africa. External validity is limited to the EM cross-section the panel actually covers; we make no claim that the relationships estimated here generalise to frontier markets, low-income countries outside the focal group, or advanced economies. Where the focal countries dominate a particular regression (the credit OOS exercise excludes Mali, Niger and Burkina Faso pre-2004 because S\&P does not rate them), we report the sample size $n$ in every results table.
+
+\subsection{Composite scoring}
+
+For each sector $s \in \{education, energy, R\&I, health, housing, security\}$, let $\bm{X}^s_{i,t}$ denote the indicator vector for country $i$ in year $t$, after the transforms documented in \texttt{config/kpi\_indicators.yaml}. Two transforms are applied: \texttt{log1p} (energy use per capita, electricity consumption per capita) and \texttt{log\_per\_capita} (scientific articles, patent applications), the latter being $\log(1 + 10^6 \cdot X / pop)$. These are not cosmetic. Without them, the composite ranks China above Singapore by virtue of sheer scale on patent and article counts (Section~\ref{sec:intro}). After them, each indicator is sign-aligned via the directional metadata (lower-is-better indicators have their sign flipped so that higher values consistently mean better outcomes) and standardised over the full panel:
+\[
+  z^s_{i,t,k} = \frac{X^s_{i,t,k} - \overline{X}^s_{\cdot,\cdot,k}}{\hat{\sigma}^s_{\cdot,\cdot,k}}.
+\]
+Panel-wide standardisation preserves both cross-sectional and time-series variation, which makes the resulting score interpretable as ``how Singapore-in-2024 compares to Singapore-in-1990'' as well as ``how Singapore in 2024 compares to Niger in 2024''.
+
+The sector score is the first principal component of $\bm{Z}^s$. We extract PC1 on the complete-case sub-panel and propagate the loadings to country-years with partial coverage by re-weighting:
+\[
+  \hat{F}^s_{i,t} \;=\; \frac{\sum_{k \in \mathcal{O}^s_{i,t}} \, w^s_k \, z^s_{i,t,k}}{\sum_{k \in \mathcal{O}^s_{i,t}}\, |w^s_k|} \cdot \sum_{k} |w^s_k|,
+\]
+where $\mathcal{O}^s_{i,t}$ is the set of indicators observed in country $i$, year $t$ for sector $s$. The composite is the equal-weighted mean of the six sector scores. PC1 explains 0.65--1.00 of the within-sector variance (security 1.00 by construction since the six WGI indicators are nearly collinear; housing 0.88; health the lowest at 0.59). The dispersion of explained variance is consistent with the indicator set being well-correlated within each sector --- the assumption that makes the composite interpretable.
+
+\subsection{Local projections}\label{sec:lp_method}
+
+For each sector shock $s$ and outcome $y$, and for horizons $h \in \{0,\dots,8\}$, we estimate
+\[
+  y_{i, t+h} - y_{i, t-1} \;=\; \alpha_i^h \;+\; \delta_t^h \;+\; \beta_s^h \cdot u^s_{i, t} \;+\; \gamma_h X_{i,t} \;+\; \varepsilon_{i,t}^h
+\]
+where $u^s_{i,t}$ is the Hamilton (2018) cyclical residual of $\hat{F}^s_{i,t}$ --- a per-country regression of $F^s_{i,t+h_{\text{H}}}$ on its four most recent lags, with $h_{\text{H}} = 2$ and $\text{lag} = 4$, exactly as in \textcite{hamilton2018filter}. Country fixed effects $\alpha_i^h$ are introduced via demeaning; year fixed effects $\delta_t^h$ as dummies. The control vector $X_{i,t}$ includes CPI inflation. Standard errors use Driscoll-Kraay (\citeyear{driscollkraay1998}) with a Bartlett kernel; the kernel lag follows the Newey-West rule (see below). When the kernel returns a non-positive-semi-definite variance, the standard errors fall back to HC1.
+
+When $y$ is a level (e.g.\ GDP per capita), it enters the LP in logs scaled by 100, so $\beta^h_s$ reads as a percent response. When $y$ is already a rate (Gini, poverty headcount), it enters in its native units and $\beta^h_s$ reads as a percentage-point response.
+
+The Driscoll-Kraay kernel lag follows the Newey-West rule of thumb $\ell = \lfloor 0.75 \, T^{1/3} \rfloor$ \parencite{newey1987simple}; for the $T = 35$ panel this gives $\ell = 2$. We also report results with $\ell = 3$ and $\ell = 5$ as a sensitivity check (Section~\ref{sec:robustness}). The Hamilton-filter forecast horizon and AR-lag length default to $h_{\text{H}} = 2$ and $p = 4$ as in the original paper; we report a Kendall-$\tau$ ranking-stability table for the $\{1, 2, 3\} \times \{3, 4, 5\}$ grid in Section~\ref{sec:robustness}. Each IRF coefficient $\beta^h_s$ is reported with its Wald $t$-statistic $\beta^h_s / \operatorname{se}(\beta^h_s)$ and the asymptotic two-sided $p$-value $2 \, (1 - \Phi(|t|))$ in \texttt{outputs/tables/lp\_irf.csv}.
+
+\subsection{Panel unit-root and cointegration tests}\label{sec:panel_tests}
+
+We complement the LP framework with two standard panel-data diagnostics. The cross-sectionally augmented panel unit-root test of \textcite{pesaran2007} (CIPS) estimates the per-country ADF regression
+\begin{equation*}
+  \Delta y_{i,t} \;=\; \alpha_i + \rho_i \, y_{i,t-1} + \theta_i \, \bar y_{t-1} + \sum_{k=1}^{p} \gamma_{i,k} \, \Delta \bar y_{t-k} + \varepsilon_{i,t},
+\end{equation*}
+where $\bar y_t$ is the cross-sectional mean, and averages the country-level $t$-statistics. We compare against the Pesaran (\citeyear{pesaran2007}) Table II critical values for the intercept-only case ($-2.15$ at the 5\% level for our panel). The Westerlund-style group-mean cointegration test \parencite{westerlund2007} estimates the long-run regression $y_{i,t} = \alpha_i + \beta_i x_{i,t} + u_{i,t}$ country by country and applies the same ADF $t$-statistic to the residuals; we report the group mean and its standard-normal $p$-value as an asymptotic approximation. Results live in \texttt{outputs/tables/cointegration\_results.csv}.
+
+\subsection{Sovereign credit}\label{sec:credit_method}
+
+We project the year-end S\&P foreign-currency long-term rating onto the sector-score vector via three pooled ordered-probit specifications:
+\begin{align*}
+  \text{(sectors only)} \qquad R^*_{i,t} &= \bm{F}_{i,t}^\top \bm{\beta} + \varepsilon_{i,t} \\
+  \text{(macro only)} \qquad\;\; R^*_{i,t} &= \bm{M}_{i,t}^\top \bm{\gamma} + \varepsilon_{i,t} \\
+  \text{(full)} \qquad\quad\;\;\, R^*_{i,t} &= \bm{F}_{i,t}^\top \bm{\beta} + \bm{M}_{i,t}^\top \bm{\gamma} + \varepsilon_{i,t}
+\end{align*}
+with $\bm{M}_{i,t} = (\text{debt/GDP}, \text{CA/GDP}, \text{CPI}, \log\text{GDPpc})$ and the observed rating $R_{i,t}$ collapsing onto the latent index $R^*_{i,t}$ through 21 cutpoints. We fit by maximum likelihood (statsmodels' \texttt{OrderedModel}). Out-of-sample evaluation is by expanding-window cross-validation: train on years $\le T-1$, predict year $T$, for $T \in \{2005, \dots, 2024\}$. We report weighted MAE on the 22-notch scale, accuracy on the investment-grade binary (rating $\ge$ BBB-, $\ge 13$ in numeric units), and the ROC AUC for that same binary.
+
+The Bayesian hierarchical variant uses the priors in Table~\ref{tab:bayes_priors}.
+
+\begin{table}[h]
+  \centering\small
+  \begin{threeparttable}
+  \caption{Prior distributions for the Bayesian hierarchical credit model.}
+  \label{tab:bayes_priors}
+  \begin{tabular}{lll}
+    \toprule
+    Parameter & Prior & Hyperparameters \\
+    \midrule
+    $\mu_\beta$ (sector-loading means) & $\mathcal{N}(0, 1)$ & --- \\
+    $\sigma_\beta$ (sector-loading SDs) & Half-$\mathcal{N}(0, 1)$ & --- \\
+    $z_\beta$ (non-centered offsets) & $\mathcal{N}(0, 1)$ & --- \\
+    $\mu_\alpha$ (country-intercept mean) & $\mathcal{N}(0, 2)$ & --- \\
+    $\sigma_\alpha$ (country-intercept SD) & Half-$\mathcal{N}(0, 1.5)$ & --- \\
+    $z_\alpha$ (non-centered offsets) & $\mathcal{N}(0, 1)$ & --- \\
+    $\gamma$ (macro coefficients) & $\mathcal{N}(0, 1)$ & --- \\
+    $\tau$ (ordered cutpoints) & ordered $\mathcal{N}(\mu_k, 1)$ & $\mu_k \in \operatorname{linspace}(-2, 2)$ \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+The non-centered parameterisation $\beta_i = \mu_\beta + \sigma_\beta z_\beta$ avoids the funnel pathology of hierarchical Normal-on-Normal sampling. Sampling uses NUTS (\textcite{hoffmangelman2014nuts}) as implemented in PyMC (\textcite{salvatieretal2016pymc}); convergence diagnostics use rank-normalised $\widehat{R}$ following \textcite{vehtari2021rank}.
+
+\subsection{EM factor portfolio}\label{sec:portfolio_method}
+
+The tradable universe is the 17 ETFs in Table~\ref{tab:etfs} (drop the six AES Sahel / Rwanda / Kenya / Morocco countries, for which no liquid US-listed ETF exists). Russia (\texttt{RSX}) is excluded from the eligible universe from March 2022 onwards, when the ETF was suspended for redemptions; any prior holding is liquidated at the next rebalance at the last available market price. At each month-end $t$ we:
+\begin{enumerate}\setlength{\itemsep}{0.1em}
+  \item Take the most recent composite score available with a six-month publication lag: a December-$Y$ score drives positions only from July-$(Y+1)$ onwards.
+  \item Cross-sectionally z-score the lagged composite over the eligible universe (those countries whose ETF has been trading for at least one month and is not Russia post-March 2022).
+  \item Form the long-only top-quintile portfolio (4 names, equal-weighted within the quintile) and the long-short top-minus-bottom portfolio.
+  \item Roll the position to the realised monthly USD return and accrue 20~bps per side on portfolio turnover.
+\end{enumerate}
+The risk-free rate is the FRED 3-month Treasury constant-maturity yield, expressed as a monthly rate. The benchmark is the EEM total-return monthly series. The realised Sharpe is computed on annualised monthly returns. A stationary bootstrap of the Sharpe (Politis-Romano, mean block length 12 months, 5\,000 reps) provides a 90~\% confidence interval for both strategies.
+
+Strategy excess returns are also regressed on a five-factor benchmark vector (MSCI EM via \texttt{EEM}, MSCI World via \texttt{URTH}, the trade-weighted USD via \texttt{UUP}, WTI crude oil via \texttt{USO}, and the FRED 3-month Treasury yield as the risk-free anchor) to recover an alpha, the factor betas and the unconditional $R^2$. The decomposition is reported in \texttt{outputs/tables/portfolio\_risk\_decomposition.csv}.
+
+\begin{table}[h]
+  \centering
+  \small
+  \begin{threeparttable}
+  \caption{Country ETFs in the Part-III tradable universe. Inception is the first month with a complete monthly return record.}
+  \label{tab:etfs}
+  \begin{tabular}{llll}
+    \toprule
+    Country & Ticker & Inception & Note \\
+    \midrule
+    Brazil & EWZ & 2000-07 & \\
+    Russia & RSX & 2007-05 & Forced close end-Feb 2022 \\
+    India & INDA & 2012-02 & \\
+    China & MCHI & 2011-04 & \\
+    South Africa & EZA & 2003-02 & \\
+    Singapore & EWS & 1996-04 & \\
+    Pakistan & PAK & 2015-04 & Thin post-2017 \\
+    Indonesia & EIDO & 2010-05 & \\
+    Mexico & EWW & 1996-04 & \\
+    T\"urkiye & TUR & 2008-03 & \\
+    Thailand & THD & 2008-03 & \\
+    Philippines & EPHE & 2010-09 & \\
+    Malaysia & EWM & 1996-04 & \\
+    Poland & EPOL & 2010-05 & \\
+    Chile & ECH & 2007-11 & \\
+    Colombia & GXG & 2009-02 & \\
+    Peru & EPU & 2009-06 & \\
+    \bottomrule
+  \end{tabular}
+  \end{threeparttable}
+\end{table}

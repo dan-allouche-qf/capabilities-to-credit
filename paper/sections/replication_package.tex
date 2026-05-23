@@ -1,0 +1,36 @@
+\section*{Replication and data availability}\label{sec:replication}
+\addcontentsline{toc}{section}{Replication and data availability}
+
+\paragraph{Code.} The full Python pipeline that produced every number, figure and table in this paper is bundled as the package \texttt{newperformers}, distributed alongside the manuscript. A single command --- \verb|make all| --- reproduces the entire workflow end-to-end (data ingestion, ETL, composite scoring, local projections, synthetic control, panel-Granger, panel unit-root and cointegration tests, frequentist and Bayesian credit models, the EM portfolio backtest, the robustness module, and figure rendering) in approximately three minutes on a 2023-vintage laptop.
+
+\paragraph{Software environment.} Python 3.11--3.13. Core dependencies are pinned in \texttt{pyproject.toml} and include NumPy, pandas, SciPy, scikit-learn, statsmodels, PyMC 6.0, ArviZ, Matplotlib, Plotly, Streamlit, and \texttt{yfinance}. All package versions are recorded in the lockfile that ships with the code archive.
+
+\paragraph{Random seeds.} The build is deterministic. The single seed \texttt{20260519} is set via \texttt{src/newperformers/utils/seeds.py} at every entry point (\texttt{numpy.random}, \texttt{random}, \texttt{PYTHONHASHSEED}); PyMC is seeded explicitly per call. Re-running \verb|make all| from a clean cache yields bitwise-identical CSV outputs and numerically-identical PDF figures (modulo non-deterministic anti-aliasing in matplotlib's vector backend, which does not affect the underlying coordinates).
+
+\paragraph{Data availability.} Every data source used in the headline build is freely accessible without subscription:
+
+\begin{itemize}\setlength{\itemsep}{0.15em}
+  \item \textbf{World Bank Open Data} (KPI, macro and outcome series): public REST API.
+  \item \textbf{Worldwide Governance Indicators} (six dimensions): World Bank channel.
+  \item \textbf{WHO Global Health Observatory} (UHC index, maternal mortality, obesity): OData endpoint.
+  \item \textbf{SIPRI Military Expenditure} (\% of GDP): public XLSX download.
+  \item \textbf{FRED} (3-month Treasury yield, USD index): public CSV endpoint.
+  \item \textbf{Yahoo Finance} (17 country ETFs and four benchmarks): \texttt{yfinance} package.
+  \item \textbf{S\&P Foreign-Currency Long-Term sovereign ratings}: hand-compiled CSV (\texttt{config/ratings.csv}) from S\&P's annual \emph{Sovereign Default and Rating Transition Study} and individual rating-action press releases, with an audit trail in \texttt{config/ratings\_audit\_trail.md} and cross-checked against 17 documented major transitions in \texttt{outputs/tables/ratings\_cross\_check.csv}.
+\end{itemize}
+
+The IMF World Economic Outlook database is referenced in the methodology but is not in the headline build: the IMF rotates the URL for each WEO release and the path we attempted (October 2024 vintage) returned a 404 at the time of compilation. The pipeline degrades gracefully when the IMF feed is unavailable, falling back on the World Bank API for the relevant macro variables.
+
+\paragraph{Audit trails.} Three CSV files document the integrity of the build:
+
+\begin{itemize}\setlength{\itemsep}{0.10em}
+  \item \texttt{outputs/tables/coverage\_matrix.csv} --- per-(country, indicator) share of years observed over 1990--2024.
+  \item \texttt{outputs/tables/ratings\_cross\_check.csv} --- automated comparison of \texttt{ratings.csv} against 17 publicly documented S\&P transitions (17/17 pass).
+  \item \texttt{outputs/tables/credit\_bayesian\_loadings.csv} --- posterior means, 90\,\% HDIs, $\widehat{R}$ and ESS for the Bayesian hierarchical credit model.
+\end{itemize}
+
+\paragraph{Tests.} The \texttt{tests/} directory contains the pytest suite (data-shape integrity, schema invariants, ratings sanity against documented transitions, Bayesian convergence thresholds). The suite gates the build: a failed convergence check or a violated rating transition surfaces as a non-zero exit code from \texttt{pytest} and aborts \texttt{make all}.
+
+\paragraph{Factual-claims audit.} A standalone tool \texttt{tools/audit\_paper\_claims.py} extracts every numeric token from the LaTeX source and looks it up in the CSV outputs at compile time. The current build passes the audit with zero orphan tokens.
+
+\paragraph{License.} The code is released under the MIT license. The hand-compiled S\&P ratings CSV is released under CC-BY-4.0 with the audit trail; the underlying rating data are public press releases from S\&P Global Ratings.

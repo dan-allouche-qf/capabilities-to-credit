@@ -1,0 +1,122 @@
+\section{Data and stylised facts}\label{sec:data}
+
+\subsection{Country panel}
+
+The focal panel is 13 countries grouped into BRICS, the Alliance of Sahel States, the High-Performers pair (Singapore and China), Emerging Africa (Rwanda, Kenya, Morocco) and South Asia (Pakistan). We extend the panel by ten ``Extension'' emerging economies (Indonesia, Mexico, T\"urkiye, Thailand, Philippines, Malaysia, Poland, Chile, Colombia, Peru), each with an active country ETF since at least 2010. The extension is needed for two distinct reasons. The cross-section of 13 countries with only ten tradable ETFs is too thin for quintile sorts. And the AES Sahel block has very sparse data on research, education and health post-2000, which would dominate the imputation diagnostics if the panel were limited to the original 13. The extension keeps the focal countries at the centre of the analysis (all six sectors and all four macro dimensions are reported by group) while letting the Part-III portfolio sort on a credible 17-country tradable universe.
+
+\subsection{Sources}
+
+KPIs are pulled from the World Bank Open Data API, the World Bank WGI channel and the WHO Global Health Observatory for 39 indicators across the six sectors. Three supplementary PISA codes (mathematics, reading, science) are documented in \texttt{config/kpi\_indicators.yaml} but demoted to a robustness check because PISA coverage is sparse for eight of the 13 focal countries. Where the World Bank exposes an indicator already harmonised --- adult literacy, life expectancy, electricity access --- we use the World Bank channel as the harmonised baseline and note the specialist-agency alternative (WHO, UNESCO, SIPRI) in the Appendix; this keeps the master ETL pipeline thin, audit-friendly and reproducible from a single API per channel. The six Worldwide Governance Indicators (Political stability, Rule of law, Control of corruption, Government effectiveness, Voice and accountability, Regulatory quality) are pulled from the World Bank's WGI channel (codes \texttt{PV.EST}, \texttt{RL.EST}, \texttt{CC.EST}, \texttt{GE.EST}, \texttt{VA.EST}, \texttt{RQ.EST}). Sovereign ratings are compiled by hand into \texttt{config/ratings.csv} for 20 countries and 30 years from the S\&P sovereign rating archive, cross-checked against rating-action press releases; AES Sahel members are unrated except for Burkina Faso, which S\&P first rated in 2004.
+
+Country-ETF prices for the Part-III backtest are downloaded via \texttt{yfinance}; benchmarks are EEM (MSCI Emerging Markets), URTH (MSCI World), UUP (USD broad index) and USO (WTI). The risk-free rate is the 3-month Treasury constant-maturity yield from FRED. All series are stored as parquet caches in \texttt{data/raw/} so that the full pipeline re-runs in roughly two minutes from a warm cache.
+
+\subsection{Coverage}
+
+\Cref{fig:coverage} reports the share of years observed per indicator and country over 1990--2024. Three patterns stand out. First, the development KPIs are best covered for the BRICS and the Extension group: Singapore, China, Poland and Brazil sit above 0.9 on most indicators. Second, the Sahel block (Burkina Faso, Mali, Niger) and Rwanda are sparsest on research and innovation (R\&D expenditure, scientific articles, patents): coverage falls below 0.3 on those columns and the indicators are excluded from the headline composite for those countries. Third, the WGI series start in 1996 and are reported every two years until 2002, after which they are annual. We linearly interpolate intermediate years within the WGI block but leave the pre-1996 cells empty.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f01_coverage_heatmap}
+  \caption{Coverage of the 39 KPI and 17 macro indicators across the 23-country panel, 1990--2024. Darker cells = larger share of years observed. The AES Sahel and Emerging Africa rows are sparsest on R\&I and PISA.}
+  \label{fig:coverage}
+\end{figure}
+
+\subsection{Imputation}
+
+The imputation pipeline is tiered. Interior gaps of up to three years are linearly interpolated within country-indicator series. The last few years of any series are forward-filled by up to three years to handle publication lags. Within each sector and each country, the residual missing cells are filled by iterative chained equations (\texttt{IterativeImputer} with \texttt{BayesianRidge}) when the country observes at least 30~\% of the years for the indicator; below that threshold the cell stays missing. Two parallel panels are persisted at \texttt{data/processed/panel\_raw.parquet} and \texttt{data/processed/panel\_imputed.parquet}; the headline results use the imputed panel and the robustness section in \Cref{sec:robustness} re-runs the composite scoring and the credit model on \texttt{panel\_raw}.
+
+\Cref{fig:selection_flow} summarises how the 23-country panel narrows as the empirical exercise tightens its data requirements, from the full panel to the sub-samples used for ratings, equity backtests and rating-change OOS prediction.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.62\linewidth]{f33_selection_flow}
+  \caption{Sample-construction flowchart. 23 panel countries narrow to 21 with S\&P sovereign ratings, 17 with liquid country-ETF coverage for the equity backtest, and 16 in the rating-change OOS sample (one country dropped for insufficient pre-2005 training history).}
+  \label{fig:selection_flow}
+\end{figure}
+
+\subsection{Stylised facts}
+
+\Cref{fig:composite_evolution} shows the composite trajectory of all 23 countries. Singapore moves from $+2.25$ in 1990 (rank~2 behind Russia that year) to $+2.93$ in 2024 --- a $+0.68~\sigma$ gain --- and holds the panel-leading composite from 1991 onwards. China carries the largest absolute improvement in the panel: $-0.03$ in 1990 rising to $+2.33$ in 2024, a $+2.36~\sigma$ swing. India climbs from $-1.63$ to $+0.52$ ($+2.15~\sigma$); Brazil from $+0.15$ to $+1.24$ ($+1.09~\sigma$). Russia is the one panel member that loses ground: $+2.27$ in 1990 down to $+1.98$ in 2024 ($-0.29~\sigma$), with a 2013--2016 dip and a step down after 2022. The Sahel block improves too, though it starts and ends well below the panel mean: Burkina Faso moves from $-2.94$ to $-1.75$ ($+1.19~\sigma$), Niger from $-4.12$ to $-2.58$ ($+1.54~\sigma$).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f02_composite_evolution}
+  \caption{Composite KPI score, 1990--2024, all 23 countries (highlighted: Singapore, China, Brazil, India, Russia, Niger). Higher = better. The composite is the equal-weighted mean of six PCA-based sector scores, with each sector's first principal component sign-aligned to the indicator-direction metadata in \texttt{config/kpi\_indicators.yaml}.}
+  \label{fig:composite_evolution}
+\end{figure}
+
+\Cref{fig:dispersion} shows the cross-country standard deviation of the composite over time. There is no measurable secular convergence at the panel level.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.78\linewidth]{f03_composite_dispersion}
+  \caption{Cross-country standard deviation of the composite KPI score, by year.}
+  \label{fig:dispersion}
+\end{figure}
+
+The trajectory chart compresses 35 years $\times$ 23 countries into one panel, which obscures which countries actually \emph{moved} fastest in rank space. \Cref{fig:rank_journey} disaggregates the picture as a rank-over-time plot: rank~1 (best) at the top of the y-axis, rank~23 at the bottom. China climbs from rank~8 in 1990 to rank~2 in 2024; India climbs from rank~18 to rank~16; Rwanda from rank~19 to rank~20 (the only focal country whose rank slips slightly). Russia is the one country whose rank \emph{worsens} substantially, from rank~1 in 1990 to rank~4 in 2024 (the country never recovered the rank lead it held that year).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f02b_composite_rank_journey}
+  \caption{Cross-sectional rank of each country on the composite KPI score over 1990--2024. Rank~1 (top of the y-axis) is the panel-leading composite each year. Focal countries are highlighted; extension EMs sit in the grey background.}
+  \label{fig:rank_journey}
+\end{figure}
+
+\Cref{fig:improvement} re-frames the same data along the development-economics axis the rank chart hides: starting position (composite in 1990) on the x-axis, change-over-the-period on the y-axis. The quadrants tell the story directly. The ``started low, improved fast'' quadrant (top-left) houses India, Morocco, Indonesia, the Sahel block and Rwanda; the ``started high, stagnated'' quadrant (bottom-right) houses Russia alone. Most other countries occupy a broad middle that combines a modest starting position with a modest gain.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f02c_improvement_vs_starting_point}
+  \caption{Composite score in 1990 (x) plotted against composite change 1990$\to$2024 (y). Each country is labelled by ISO3. Dashed lines mark the panel medians; quadrant labels describe the catch-up vs divergence story.}
+  \label{fig:improvement}
+\end{figure}
+
+\Cref{fig:sectors} disaggregates the composite into its six sector inputs. Singapore and China lead on research \& innovation and energy, while the Sahel block leads on no sector. The shape of the panels is sector-specific and reflected in the principal-component diagnostics of Section~\ref{sec:methodology}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f04_sector_scores}
+  \caption{Sector-level scores for the six KPI sectors, by country, 1990--2024.}
+  \label{fig:sectors}
+\end{figure}
+
+The trajectory figure shows \emph{levels}; the heatmap in \Cref{fig:sector_change} shows \emph{changes}. Countries are sorted top-to-bottom by total improvement; each cell is the difference between the 2024 and 1990 sector scores. China improved on all six sectors (every cell teal); Russia improved on energy and security only and went backward on health ($-2.5$~$\sigma$); Niger gained $+6.1$~$\sigma$ in health from an extremely low base while other sectors barely moved.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f06b_sector_change_heatmap}
+  \caption{Per-country, per-sector change in sector score between 1990 and 2024. Rows sorted by total cross-sector improvement.}
+  \label{fig:sector_change}
+\end{figure}
+
+\Cref{fig:slope} closes the stylised-facts block with the slope chart of GDP per capita 1990 vs 2024 in current USD. The 1990--2024 multiplier is largest for China ($\times 41.8$, from \$319 to \$13\,303), followed by Poland ($\times 14.5$), Singapore ($\times 7.6$, from \$11\,862 to \$90\,674), India ($\times 7.3$), Russia ($\times 4.3$), Brazil ($\times 3.9$), Burkina Faso ($\times 2.9$) and Niger ($\times 1.7$, the smallest multiplier in the panel).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\linewidth]{f05_gdp_slope}
+  \caption{Slope chart of GDP per capita, 1990 vs 2024 (log scale). Annotation $\times N$ = ratio of 2024 to 1990 GDPpc in current USD.}
+  \label{fig:slope}
+\end{figure}
+
+\subsection{Macroeconomic backdrop}
+
+The four macro dimensions of the framework (national debt, current account, FX reserves, FDI) trace four very different storylines (\Cref{fig:macro}). Singapore runs a structural current-account surplus of $15$ to $27\%$ of GDP from the mid-2000s onwards (average $19\%$) and an FDI-inflow ratio that peaks at $32.6\%$. India accumulates FX reserves slowly through the 2000s and 2010s, ending the period at \$643 billion. China's reserves dominate the panel in absolute terms (peak of \$3.90 trillion in 2014, still at \$3.46 trillion in 2024) and inform much of the global-imbalance literature of that decade. Brazil's central-government debt-to-GDP rises from $61\%$ in 2010 to a 2020 peak of $99\%$ and returns to $82\%$ by 2024 --- the macro counterpart of the 2015 S\&P downgrade and the partial post-COVID consolidation.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f06_macro_panel}
+  \caption{Macroeconomic backdrop, four dimensions. Highlights: Singapore, China, Brazil, India, Russia.}
+  \label{fig:macro}
+\end{figure}
+
+\subsection{PCA structure of the sectors}
+
+\Cref{fig:biplots} reports the PCA biplot per sector: each panel shows country-year observations projected onto the first two principal components, with indicator loadings overlaid as arrows. The shape is informative for the methodology section. Energy and housing show a tight cluster of indicators co-loading on PC1 (one underlying ``development'' axis explains the bulk of within-sector variance, consistent with the 73~\% and 88~\% PC1 ratios respectively). R\&I and education have one indicator (high-tech exports for R\&I; literacy for education) that loads orthogonally on PC2 --- the variance not captured by the headline composite. Health is the most disperse, which is consistent with both the lowest PC1 ratio in the panel (59~\%) and the loading pattern in \Cref{tab:credit_coefs}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{f07_pca_biplots}
+  \caption{PCA biplots, one panel per sector. Arrows are indicator loadings on PC1 and PC2; grey points are country-year observations.}
+  \label{fig:biplots}
+\end{figure}
